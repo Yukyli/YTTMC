@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group Discussion Lesson Slides</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a2e; overflow: hidden; }
+
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 50px 70px;
+            position: relative;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: auto;
+        }
+        .slide.active { display: flex; }
+
+        /* Vibrant backgrounds */
+        .bg-candy {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+        .bg-candy::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .bg-candy::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+        }
+
+        .bg-sunset {
+            background: linear-gradient(135deg, #4a00e0 0%, #8e2de2 100%);
+            color: #fff;
+        }
+        .bg-sunset::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            right: 5%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+
+        .bg-ocean {
+            background: linear-gradient(135deg, #0093E9 0%, #80D0C7 100%);
+            color: #fff;
+        }
+        .bg-ocean::before {
+            content: '';
+            position: absolute;
+            bottom: 10%;
+            right: 10%;
+            width: 250px;
+            height: 250px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+        }
+
+        .bg-forest {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: #fff;
+        }
+        .bg-forest::before {
+            content: '';
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            width: 180px;
+            height: 180px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+        }
+
+        .bg-fire {
+            background: linear-gradient(135deg, #f12711 0%, #f5af19 100%);
+            color: #fff;
+        }
+        .bg-fire::before {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            right: -40px;
+            width: 350px;
+            height: 350px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+
+        .bg-night {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+        }
+        .bg-night::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            right: 8%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+        .bg-night::after {
+            content: '';
+            position: absolute;
+            bottom: 10%;
+            left: 5%;
+            width: 220px;
+            height: 220px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+        }
+
+        .bg-royal {
+            background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            color: #fff;
+        }
+
+        .bg-peach {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #333;
+        }
+
+        .bg-mint {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+
+        .bg-slate {
+            background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+            color: #fff;
+        }
+
+        .bg-warm {
+            background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            color: #333;
+        }
+
+        .slide-title {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            line-height: 1.2;
+            position: relative;
+            z-index: 1;
+        }
+        .slide-subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slide-content { font-size: 1.4rem; line-height: 1.8; position: relative; z-index: 1; }
+        .slide-content li { margin-bottom: 12px; }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .col-box {
+            background: rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(5px);
+        }
+        .col-box h3 { font-size: 1.6rem; margin-bottom: 15px; }
+        .col-box li { font-size: 1.25rem; margin-bottom: 10px; line-height: 1.5; }
+
+        .do-item { color: #a8ffb0; }
+        .dont-item { color: #fffc47; }
+
+        /* Table styles */
+        .role-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 1.1rem; position: relative; z-index: 1; }
+        .role-table th, .role-table td { padding: 14px 18px; text-align: center; border: 1px solid rgba(255,255,255,0.25); }
+        .role-table th { background: rgba(255,255,255,0.2); font-size: 1.15rem; }
+        .role-table td { background: rgba(255,255,255,0.08); }
+        .role-label-cell { font-weight: bold; text-align: left; background: rgba(255,255,255,0.15) !important; }
+
+        /* Timer */
+        .timer-display {
+            font-size: 10rem;
+            font-weight: bold;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 5px;
+            position: relative;
+            z-index: 1;
+        }
+        .timer-label { text-align: center; font-size: 2rem; margin-bottom: 30px; opacity: 0.8; position: relative; z-index: 1; }
+        .timer-btn {
+            display: block;
+            margin: 30px auto 0;
+            padding: 15px 50px;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            color: inherit;
+            border: 2px solid rgba(255,255,255,0.5);
+            transition: 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+        .timer-btn:hover { background: rgba(255,255,255,0.3); }
+
+        /* Points highlight */
+        .highlight-box {
+            background: rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin-top: 20px;
+            font-size: 1.3rem;
+            border: 2px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+        .nav button {
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: 0.2s;
+        }
+        .nav button:hover { background: #fff; transform: scale(1.05); }
+
+        .slide-number {
+            position: fixed;
+            bottom: 35px;
+            left: 40px;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+            z-index: 1000;
+        }
+
+        /* Note demo styles */
+        .note-demo {
+            font-family: 'Comic Sans MS', 'Segoe UI', cursive;
+            background: #fffde7;
+            color: #333;
+            padding: 20px 24px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            line-height: 1.9;
+            border: 1px solid #ddd;
+            box-shadow: 2px 3px 8px rgba(0,0,0,0.1);
+        }
+        .note-demo.rotated { transform: rotate(-1deg); }
+
+        /* Mind map styles */
+        .mindmap-demo {
+            font-family: 'Comic Sans MS', 'Segoe UI', cursive;
+            background: #fffde7;
+            color: #333;
+            padding: 20px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            box-shadow: 2px 3px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            line-height: 1.8;
+        }
+        .mindmap-center {
+            display: inline-block;
+            background: #ffe082;
+            border-radius: 50%;
+            padding: 10px 18px;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        .mindmap-branch {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .mindmap-node {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 0.85rem;
+            border: 1px solid #90caf9;
+        }
+        .mindmap-sub {
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        /* Numbered notes style */
+        .numbered-demo {
+            font-family: 'Comic Sans MS', 'Segoe UI', cursive;
+            background: #fffde7;
+            color: #333;
+            padding: 20px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            line-height: 2;
+            border: 1px solid #ddd;
+            box-shadow: 2px 3px 8px rgba(0,0,0,0.1);
+            transform: rotate(0.5deg);
+        }
+
+        .style-label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            border-radius: 6px;
+        }
+
+        .rules-list { list-style: none; font-size: 1.3rem; position: relative; z-index: 1; }
+        .rules-list li { margin-bottom: 14px; padding-left: 10px; }
+        .rules-list li::before { content: "▸ "; color: #f1c40f; }
+
+        /* Vocabulary section styles */
+        .topic-banner {
+            background: rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-bottom: 18px;
+            border-left: 5px solid rgba(255,255,255,0.7);
+            position: relative;
+            z-index: 1;
+        }
+        .topic-banner h2 { font-size: 1.6rem; margin-bottom: 8px; }
+        .topic-banner p { font-size: 1.1rem; opacity: 0.9; }
+
+        .discussion-qs {
+            list-style: none;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .discussion-qs li {
+            margin-bottom: 6px;
+            padding-left: 5px;
+        }
+        .discussion-qs li::before { content: "💬 "; }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .vocab-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 12px 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .vocab-card .word { font-weight: bold; font-size: 1.1rem; color: #ffe066; }
+        .vocab-card .meaning { font-size: 0.9rem; opacity: 0.85; margin-top: 2px; }
+        .vocab-card .example { font-size: 0.85rem; opacity: 0.65; font-style: italic; margin-top: 3px; }
+
+        /* My Ideas box */
+        .my-ideas-box {
+            margin-top: 15px;
+            border: 3px dashed rgba(255,255,255,0.4);
+            border-radius: 12px;
+            padding: 18px 25px;
+            min-height: 80px;
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.05);
+        }
+        .my-ideas-box .label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+        .my-ideas-box .hint {
+            font-size: 0.95rem;
+            opacity: 0.5;
+            font-style: italic;
+        }
+
+        /* Rescue phrase cards */
+        .rescue-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 14px;
+            border-left: 4px solid #ffd700;
+            position: relative;
+            z-index: 1;
+        }
+        .rescue-card .problem {
+            font-size: 1rem;
+            color: #ffd700;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .rescue-card .phrase {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        /* Handout styles */
+        .handout-section {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 18px;
+        }
+        .handout-section h3 {
+            font-size: 1.15rem;
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        .phrase-list {
+            list-style: none;
+            font-size: 1rem;
+            padding-left: 15px;
+        }
+        .phrase-list li {
+            margin-bottom: 4px;
+            padding-left: 12px;
+            border-left: 3px solid rgba(255,255,255,0.3);
+            line-height: 1.6;
+        }
+        .phrase-list li.new-phrase {
+            border-left: 3px solid #ff6b6b;
+        }
+
+        /* Timer flash animation */
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .timer-flash {
+            animation: flash 0.5s infinite;
+        }
+
+        /* Bad example cards */
+        .bad-card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 30px;
+            border: 2px solid rgba(255,255,255,0.15);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .bad-card .bad-icon { font-size: 3rem; margin-bottom: 12px; }
+        .bad-card .bad-title { font-size: 1.3rem; font-weight: bold; margin-bottom: 8px; color: #c0392b; }
+        .bad-card .bad-desc { font-size: 1.05rem; opacity: 0.8; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+<!-- SLIDE 1: Do's and Don'ts -->
+<div class="slide bg-ocean active" id="slide1">
+    <div class="slide-title">🗣️ Group Discussion Rules</div>
+    <div class="two-col">
+        <div class="col-box">
+            <h3>✅ Do</h3>
+            <ul style="list-style:none;">
+                <li class="do-item">👄 Speak up</li>
+                <li class="do-item">👁️ Maintain eye contact</li>
+                <li class="do-item">🔄 Keep the conversation going</li>
+                <li class="do-item">👂 Listen and respond</li>
+                <li class="do-item">💡 Give your ideas with reasons</li>
+                <li class="do-item">😊 Smile</li>
+            </ul>
+        </div>
+        <div class="col-box">
+            <h3>❌ Don't</h3>
+            <ul style="list-style:none;">
+                <li class="dont-item">😶 Be passive</li>
+                <li class="dont-item">😤 Be rude</li>
+                <li class="dont-item">📄 Stare at the paper</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 2: Rescue Cards Info -->
+<div class="slide bg-candy" id="slide2">
+    <div class="slide-title">🆘 Rescue Cards</div>
+    <div class="slide-content">
+        <div class="highlight-box" style="margin-bottom: 25px;">
+            <p><strong>What are they?</strong></p>
+            <p style="margin-top:10px;">Each group gets rescue slips. If you are stuck and don't know what to say, you can use a rescue slip to help you.</p>
+        </div>
+        <div class="highlight-box" style="margin-bottom: 25px;">
+            <p><strong>When to use them?</strong></p>
+            <p style="margin-top:10px;">When you can't think of what to say, or when the conversation stops.</p>
+        </div>
+        <div class="highlight-box">
+            <p><strong>Remember:</strong></p>
+            <p style="margin-top:10px;">Using a rescue slip is <strong>not</strong> losing — it's a smart move to keep the discussion going! 💪</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 3: Rescue Phrases (actual content) -->
+<div class="slide bg-sunset" id="slide3">
+    <div class="slide-title">🆘 Rescue Phrases — Use these when you're stuck!</div>
+    <div class="rescue-card">
+        <div class="problem">👂 Problem: I can't hear clearly</div>
+        <div class="phrase">"Sorry, could you say that again?"</div>
+    </div>
+    <div class="rescue-card">
+        <div class="problem">🔀 Problem: Someone is off topic</div>
+        <div class="phrase">"That's interesting, but maybe we should go back to the question?"</div>
+    </div>
+    <div class="rescue-card">
+        <div class="problem">😶 Problem: No one is speaking</div>
+        <div class="phrase">"[Name], what do you think?"</div>
+    </div>
+    <div class="rescue-card">
+        <div class="problem">⏭️ Problem: We want to move to the next question</div>
+        <div class="phrase">"Shall we move on to the next question?"</div>
+    </div>
+</div>
+
+<!-- SLIDE 4: How to Prepare — GOOD EXAMPLES (different topic) -->
+<div class="slide bg-night" id="slide4">
+    <div class="slide-title">📝 3-Minute Preparation — What Should I Write?</div>
+    <div class="slide-subtitle">You DON'T need full sentences. Pick a style that works for you!</div>
+    <p style="font-size:1rem; opacity:0.7; margin-bottom:15px; position:relative; z-index:1;">Demo topic: "What should we do this weekend?"</p>
+    <div class="three-col">
+        <div>
+            <div class="style-label">✏️ Style A: Keywords + Arrows</div>
+            <div class="note-demo rotated">
+                Where? → shopping mall (fun, cool inside)<br>
+                Activity → watch movie → new Marvel<br>
+                Food → lunch → ramen place<br>
+                Time → Saturday afternoon<br><br>
+                <span style="color:#1565c0;">Phrase:</span> "I think... because..."<br>
+                <span style="color:#1565c0;">Phrase:</span> "How about...?"
+            </div>
+        </div>
+        <div>
+            <div class="style-label">🌿 Style B: Mini Mind Map</div>
+            <div class="mindmap-demo">
+                <div class="mindmap-center">🎉 Weekend</div>
+                <div class="mindmap-branch">
+                    <div class="mindmap-node">🎬 movie<br><span class="mindmap-sub">new, exciting</span></div>
+                    <div class="mindmap-node">🍜 ramen<br><span class="mindmap-sub">cheap, yummy</span></div>
+                </div>
+                <div class="mindmap-branch" style="margin-top:8px;">
+                    <div class="mindmap-node">🛍️ mall<br><span class="mindmap-sub">easy to get to</span></div>
+                    <div class="mindmap-node">📅 Sat PM<br><span class="mindmap-sub">everyone free</span></div>
+                </div>
+                <div style="margin-top:10px; font-size:0.85rem; text-align:left; color:#1565c0;">
+                    Say: "I suggest..." / "because..."
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="style-label">🔢 Style C: Numbered Notes</div>
+            <div class="numbered-demo">
+                Q1 → mall (convenient, MTR)<br>
+                Q2 → movie (everyone likes)<br>
+                Q3 → ramen for lunch (cheap)<br>
+                Q4 → Sat 2pm (no school)<br><br>
+                <span style="color:#1565c0;">★ agree → "I agree because..."</span><br>
+                <span style="color:#1565c0;">★ disagree → "I see your point, but..."</span>
+            </div>
+        </div>
+    </div>
+    <div class="highlight-box" style="text-align:center; margin-top:20px; font-size:1.2rem;">
+        💡 <strong>Key idea:</strong> Write just enough to remind yourself. Include 1–2 phrases you want to use!
+    </div>
+</div>
+
+<!-- SLIDE 5: How NOT to Prepare — BAD EXAMPLES -->
+<div class="slide bg-warm" id="slide5">
+    <div class="slide-title" style="color:#333;">❌ Don't Do This During Preparation!</div>
+    <div class="slide-subtitle" style="color:#555;">These are common mistakes — avoid them!</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:25px; margin-top:20px; position:relative; z-index:1;">
+        <div class="bad-card">
+            <div class="bad-icon">😶</div>
+            <div class="bad-title">The Blank Stare</div>
+            <div class="bad-desc">Staring at the paper for 3 minutes... writing nothing.<br><br><em>"I don't know what to write"</em> → Just write <strong>one word</strong> per question to start!</div>
+        </div>
+        <div class="bad-card">
+            <div class="bad-icon">📖</div>
+            <div class="bad-title">The Full Script</div>
+            <div class="bad-desc">Writing complete sentences, then reading like a robot during discussion.<br><br>You'll sound unnatural and won't be able to <strong>react</strong> to others.</div>
+        </div>
+        <div class="bad-card">
+            <div class="bad-icon">🔤</div>
+            <div class="bad-title">The Spelling Trap</div>
+            <div class="bad-desc">Spending 3 minutes trying to spell one word perfectly.<br><br>No one sees your paper! <strong>Wrong spelling is fine</strong> — it's just for YOU.</div>
+        </div>
+        <div class="bad-card">
+            <div class="bad-icon">😫</div>
+            <div class="bad-title">The Perfectionist</div>
+            <div class="bad-desc">Giving up because you can't say it "perfectly" in English.<br><br>Simple English + a reason = <strong>much better</strong> than silence!</div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6: Round 1 Topic & Vocabulary -->
+<div class="slide bg-forest" id="slide6">
+    <div class="slide-title">🟢 Round 1 — Topic & Vocabulary</div>
+    <div class="topic-banner">
+        <h2>🎂 Planning a Birthday Party for Your Best Friend</h2>
+        <p>You are talking to your classmates about planning a birthday party for your best friend.</p>
+    </div>
+    <p style="font-size:1.15rem; font-weight:bold; margin-bottom:8px; position:relative; z-index:1;">Discussion Questions:</p>
+    <ul class="discussion-qs">
+        <li><strong>Where</strong> should we hold the party? (e.g. restaurant, home, park)</li>
+        <li><strong>What food</strong> should we prepare? (e.g. pizza, cake, snacks)</li>
+        <li><strong>What gift</strong> should we buy? (e.g. something useful, something fun)</li>
+        <li><strong>What activities</strong> should we plan? (e.g. games, karaoke, movie)</li>
+        <li><strong>Anything else</strong> you think is important.</li>
+    </ul>
+    <div class="my-ideas-box">
+        <div class="label">✏️ My Ideas:</div>
+        <div class="hint">Write your key words and short notes here during preparation time...</div>
+    </div>
+    <p style="font-size:1.1rem; font-weight:bold; margin-top:15px; margin-bottom:8px; position:relative; z-index:1;">Useful Words:</p>
+    <div class="vocab-grid">
+        <div class="vocab-card">
+            <div class="word">venue</div>
+            <div class="meaning">the place where the party is held</div>
+            <div class="example">"I think the best venue is a restaurant."</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">budget</div>
+            <div class="meaning">the amount of money you can spend</div>
+            <div class="example">"Our budget is about $500."</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">decoration</div>
+            <div class="meaning">things to make a place look nice</div>
+            <div class="example">"We should buy some decorations."</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">surprise</div>
+            <div class="meaning">something unexpected and exciting</div>
+            <div class="example">"Let's make it a surprise party!"</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">invitation</div>
+            <div class="meaning">asking someone to come to the party</div>
+            <div class="example">"Should we send invitations by WhatsApp?"</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">celebrate</div>
+            <div class="meaning">to do something special for a happy event</div>
+            <div class="example">"We want to celebrate her birthday."</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">homemade</div>
+            <div class="meaning">made at home, not bought</div>
+            <div class="example">"A homemade cake is more meaningful."</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">thoughtful</div>
+            <div class="meaning">showing care about what someone likes</div>
+            <div class="example">"A thoughtful gift is better than an expensive one."</div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7: Rules -->
+<div class="slide bg-night" id="slide7">
+    <div class="slide-title">⚡ Discussion Rules</div>
+    <div style="max-width:800px; margin: 20px auto; position:relative; z-index:1;">
+        <ul class="rules-list" style="font-size:1.5rem;">
+            <li>Use your <strong>phrase slips</strong> during discussion</li>
+            <li>Each group has <strong>rescue slips</strong> if stuck</li>
+            <li>Agree/disagree with <strong>NO reason = 0 points</strong></li>
+            <li>Elaborate with reasons = <strong>earn points!</strong></li>
+            <li>We calculate group points at the end</li>
+        </ul>
+        <div class="highlight-box" style="text-align:center; margin-top:40px; font-size:1.5rem;">
+            🎯 The goal: <strong>Keep talking</strong> and <strong>give reasons</strong>!
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8: Round 1 Roles -->
+<div class="slide bg-royal" id="slide8">
+    <div class="slide-title">👥 Round 1 — Your Roles</div>
+    <table class="role-table" style="font-size:1.15rem; max-width:950px; margin: 30px auto;">
+        <tr><th>Role</th><th>Group 1</th><th>Group 2</th><th>Group 3</th><th>Group 4</th></tr>
+        <tr><td class="role-label-cell">🎤 Starter</td><td>Moon (18)</td><td>Bill (3)</td><td>Winsy (10)</td><td>Mavis (15)</td></tr>
+        <tr><td class="role-label-cell">👍 Supporter</td><td>Edwin (23)</td><td>Moses (4)</td><td>Ruby (12)</td><td>Ava (19)</td></tr>
+        <tr><td class="role-label-cell">🤔 Challenger</td><td>Daisy (31)</td><td>Sam (29)</td><td>Grace (14)</td><td>Alice (21)</td></tr>
+        <tr><td class="role-label-cell">📋 Summarizer</td><td>Matt (5)</td><td>Dick (1)</td><td>Cherry (9)</td><td>Ashley (13)</td></tr>
+    </table>
+    <div class="highlight-box" style="text-align:center; margin-top:30px; font-size:1.4rem;">
+        Rules are clear? Roles are clear? 👉 Let's start the <strong>3-minute preparation!</strong>
+    </div>
+</div>
+
+<!-- SLIDE 9: Timer - 3 min preparation (Round 1) -->
+<div class="slide bg-night" id="slide9">
+    <div style="margin-top:15vh;">
+        <div class="timer-label">✏️ Preparation Time — Round 1</div>
+        <div class="timer-display" id="timer1">3:00</div>
+        <button class="timer-btn" onclick="startTimer('timer1', 180)">▶ Start Timer</button>
+    </div>
+</div>
+
+<!-- SLIDE 10: Timer - 5 min discussion (Round 1) -->
+<div class="slide bg-forest" id="slide10">
+    <div style="margin-top:15vh;">
+        <div class="timer-label">🗣️ Round 1 Discussion — GO!</div>
+        <div class="timer-display" id="timer2">5:00</div>
+        <button class="timer-btn" onclick="startTimer('timer2', 300)">▶ Start Timer</button>
+    </div>
+</div>
+
+<!-- SLIDE 11: Round 1 Feedback -->
+<div class="slide bg-ocean" id="slide11">
+    <div style="display:flex; align-items:center; justify-content:center; height:100%; position:relative; z-index:1;">
+        <div class="slide-title" style="font-size:4rem; text-align:center; margin:0;">🌟 Round 1 — Feedback</div>
+    </div>
+</div>
+
+<!-- SLIDE 12: Round 2 Topic & Vocabulary -->
+<div class="slide bg-fire" id="slide12">
+    <div class="slide-title">🟠 Round 2 — Topic & Vocabulary</div>
+    <div class="topic-banner">
+        <h2>🚌 Planning a Class Trip Together</h2>
+        <p>You are talking to your classmates about planning a class trip together.</p>
+    </div>
+    <p style="font-size:1.15rem; font-weight:bold; margin-bottom:8px; position:relative; z-index:1;">Discussion Questions:</p>
+    <ul class="discussion-qs">
+        <li><strong>Where</strong> should we go? (e.g. beach, theme park, museum, countryside)</li>
+        <li><strong>How</strong> should we get there? (e.g. bus, MTR, walking)</li>
+        <li><strong>What activities</strong> should we do? (e.g. games, BBQ, sightseeing)</li>
+        <li><strong>What</strong> should we bring? (e.g. food, camera, sunscreen)</li>
+        <li><strong>Anything else</strong> you think is important.</li>
+    </ul>
+    <div class="my-ideas-box">
+        <div class="label">✏️ My Ideas:</div>
+        <div class="hint">Write your key words and short notes here during preparation time...</div>
+    </div>
+    <p style="font-size:1.1rem; font-weight:bold; margin-top:15px; margin-bottom:8px; position:relative; z-index:1;">Useful Words:</p>
+    <div class="vocab-grid">
+        <div class="vocab-card">
+            <div class="word">destination</div>
+            <div class="meaning">the place you are travelling to</div>
+            <div class="example">"I think the best destination is the beach."</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">transport</div>
+            <div class="meaning">how you get there (bus, MTR, etc.)</div>
+            <div class="example">"We should take the bus because it's cheaper."</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">outdoor</div>
+            <div class="meaning">done outside, not in a building</div>
+            <div class="example">"Outdoor activities are more fun."</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">vote</div>
+            <div class="meaning">to choose by letting everyone decide</div>
+            <div class="example">"Let's vote for the best place."</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">suggest</div>
+            <div class="meaning">to give an idea for others to think about</div>
+            <div class="example">"I suggest we go to a theme park."</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">prefer</div>
+            <div class="meaning">to like one thing more than another</div>
+            <div class="example">"I prefer the beach to hiking."</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">affordable</div>
+            <div class="meaning">not too expensive</div>
+            <div class="example">"A picnic is more affordable."</div>
+        </div>
+        <div class="vocab-card">
+            <div class="word">memorable</div>
+            <div class="meaning">something you will remember for a long time</div>
+            <div class="example">"I want to do something memorable."</div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 13: Round 2 Roles -->
+<div class="slide bg-royal" id="slide13">
+    <div class="slide-title">🔄 Round 2 — New Roles!</div>
+    <table class="role-table" style="font-size:1.15rem; max-width:950px; margin: 30px auto;">
+        <tr><th>Role</th><th>Group 1</th><th>Group 2</th><th>Group 3</th><th>Group 4</th></tr>
+        <tr><td class="role-label-cell">🎤 Starter</td><td>Edwin (23)</td><td>Moses (4)</td><td>Ruby (12)</td><td>Ava (19)</td></tr>
+        <tr><td class="role-label-cell">👍 Supporter</td><td>Daisy (31)</td><td>Sam (29)</td><td>Grace (14)</td><td>Alice (21)</td></tr>
+        <tr><td class="role-label-cell">🤔 Challenger</td><td>Matt (5)</td><td>Dick (1)</td><td>Cherry (9)</td><td>Ashley (13)</td></tr>
+        <tr><td class="role-label-cell">📋 Summarizer</td><td>Moon (18)</td><td>Bill (3)</td><td>Winsy (10)</td><td>Mavis (15)</td></tr>
+    </table>
+    <div class="highlight-box" style="text-align:center; margin-top:30px; font-size:1.3rem;">
+        🔁 Same groups, <strong>new roles!</strong> — Ready for preparation? 👉
+    </div>
+</div>
+
+<!-- SLIDE 14: Timer - 3 min preparation (Round 2) -->
+<div class="slide bg-night" id="slide14">
+    <div style="margin-top:15vh;">
+        <div class="timer-label">✏️ Preparation Time — Round 2</div>
+        <div class="timer-display" id="timer3">3:00</div>
+        <button class="timer-btn" onclick="startTimer('timer3', 180)">▶ Start Timer</button>
+    </div>
+</div>
+
+<!-- SLIDE 15: Timer - 4 min discussion (Round 2) -->
+<div class="slide bg-fire" id="slide15">
+    <div style="margin-top:15vh;">
+        <div class="timer-label">🗣️ Round 2 Discussion — GO!</div>
+        <div class="timer-display" id="timer4">4:00</div>
+        <button class="timer-btn" onclick="startTimer('timer4', 240)">▶ Start Timer</button>
+    </div>
+</div>
+
+<!-- SLIDE 16: Evaluation & Reflection -->
+<div class="slide bg-candy" id="slide16">
+    <div class="slide-title">📋 Reflection Time</div>
+    <div class="slide-content" style="font-size:1.4rem;">
+        <div class="highlight-box" style="margin-bottom:25px;">
+            <p>📊 <strong>Group Points</strong></p>
+            <p style="margin-top:10px;">Group 1: _____ &nbsp;&nbsp; Group 2: _____ &nbsp;&nbsp; Group 3: _____ &nbsp;&nbsp; Group 4: _____</p>
+        </div>
+        <div class="highlight-box" style="margin-bottom:25px;">
+            <p>📝 <strong>Fill in your Reflection Sheet</strong></p>
+            <ul style="margin-top:15px; font-size:1.2rem; line-height:2;">
+                <li>Part A: What you noticed ☑️</li>
+                <li>Part B: Praise a groupmate 🌟</li>
+                <li>Part C: Your own reflection 🪞</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 17: Take-Home Expression Sheet (Handout) -->
+<div class="slide bg-slate" id="slide17">
+    <div class="slide-title">📄 Take-Home Expression Sheet</div>
+    <div class="slide-subtitle">Keep this! Use it to practise before Day 4.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; position:relative; z-index:1;">
+        <div class="handout-section">
+            <h3>🎤 Opening the Discussion</h3>
+            <ul class="phrase-list">
+                <li>Hello, everyone. Today, we are talking about ___.</li>
+                <li>Let's talk about ___.</li>
+                <li class="new-phrase">I'd like to start by talking about ___. In my opinion, ___ because ___.</li>
+                <li class="new-phrase">First, let's discuss ___. I think ___ because ___. Does anyone agree or disagree?</li>
+            </ul>
+        </div>
+        <div class="handout-section">
+            <h3>💬 Giving Your Opinion</h3>
+            <ul class="phrase-list">
+                <li>I think ___.</li>
+                <li>I also think that ___.</li>
+                <li>How about ___?</li>
+                <li>Maybe we can ___.</li>
+                <li>I think ___ because ___.</li>
+            </ul>
+        </div>
+        <div class="handout-section">
+            <h3>👍 Agreeing</h3>
+            <ul class="phrase-list">
+                <li>I agree with you.</li>
+                <li>That is a good idea.</li>
+                <li>I agree with you because ___.</li>
+                <li>That is a good idea because ___.</li>
+                <li class="new-phrase">I agree with [Name] because ___. I'd also like to add that ___.</li>
+                <li class="new-phrase">That's a great point because ___. We could also ___.</li>
+            </ul>
+        </div>
+        <div class="handout-section">
+            <h3>😣 Disagreeing (Politely)</h3>
+            <ul class="phrase-list">
+                <li>I don't think so.</li>
+                <li>I have a different idea.</li>
+                <li>I see your point, but I think ___.</li>
+                <li>That's true, but don't forget that ___.</li>
+                <li>That is an interesting point. However, I believe ___ because ___.</li>
+                <li>You make a good point. On the other hand, ___.</li>
+                <li class="new-phrase">I understand what you mean, but have you considered ___?</li>
+                <li class="new-phrase">While I agree about ___, I think ___ would be better because ___.</li>
+            </ul>
+        </div>
+        <div class="handout-section">
+            <h3>🗣️ Inviting Others to Speak</h3>
+            <ul class="phrase-list">
+                <li>Do you agree, [Name]?</li>
+                <li>Do you think so, [Name]?</li>
+                <li>What do you think, [Name]?</li>
+                <li>Do you have any idea, [Name]?</li>
+            </ul>
+        </div>
+        <div class="handout-section">
+            <h3>📋 Closing / Summarising</h3>
+            <ul class="phrase-list">
+                <li>To sum up, we think ___.</li>
+                <li>In conclusion, ___.</li>
+                <li>To sum up, most of us think ___ because ___.</li>
+                <li>To summarise, we discussed ___ and decided that ___.</li>
+                <li class="new-phrase">To sum up, some of us think ___ while others believe ___.</li>
+                <li>That's the end of our discussion. Thank you.</li>
+            </ul>
+        </div>
+    </div>
+    <p style="font-size:0.9rem; opacity:0.6; margin-top:15px; position:relative; z-index:1;">Phrases marked with a <span style="color:#ff6b6b;">▎</span> red line are new phrases from today's lesson — challenge yourself to use them!</p>
+</div>
+
+<!-- SLIDE 18: Next Discussion Date -->
+<div class="slide bg-mint" id="slide18">
+    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; position:relative; z-index:1;">
+        <div class="slide-title" style="text-align:center; color:#333;">📅 Next Group Discussion</div>
+        <div class="highlight-box" style="margin-bottom:30px; text-align:center; background:rgba(0,0,0,0.06); border-color:rgba(0,0,0,0.15);">
+            <p style="font-size:2rem; color:#333;">⚡ Day 4 — 22nd April</p>
+        </div>
+        <div class="highlight-box" style="margin-bottom:30px; text-align:center; background:rgba(0,0,0,0.06); border-color:rgba(0,0,0,0.15);">
+            <p style="color:#333;">Next lesson, you will discuss <strong>without slips</strong>. Try to remember these phrases!</p>
+            <p style="margin-top:10px; color:#555;">You may glance at this sheet, but the goal is to speak naturally without reading.</p>
+        </div>
+        <div style="margin-top:30px; font-size:2.2rem; color:#333;">
+            🎉 Well done today! Keep practising! 🎉
+        </div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+    <button onclick="prevSlide()">◀ Back</button>
+    <button onclick="nextSlide()">Next ▶</button>
+</div>
+<div class="slide-number" id="slideNum">1 / 18</div>
+
+<script>
+    let currentSlide = 1;
+    const totalSlides = 18;
+    let timerIntervals = {};
+
+    let audioCtx = null;
+
+    function getAudioContext() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        return audioCtx;
+    }
+
+    function playAlarm() {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+
+        const beeps = [
+            { freq: 880, start: 0, duration: 0.15 },
+            { freq: 880, start: 0.25, duration: 0.15 },
+            { freq: 880, start: 0.5, duration: 0.15 },
+            { freq: 1100, start: 0.8, duration: 0.15 },
+            { freq: 1100, start: 1.05, duration: 0.15 },
+            { freq: 1100, start: 1.3, duration: 0.15 },
+            { freq: 1320, start: 1.6, duration: 0.3 },
+        ];
+
+        beeps.forEach(beep => {
+            const oscillator = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(ctx.destination);
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(beep.freq, now + beep.start);
+
+            gainNode.gain.setValueAtTime(0, now + beep.start);
+            gainNode.gain.linearRampToValueAtTime(0.6, now + beep.start + 0.02);
+            gainNode.gain.setValueAtTime(0.6, now + beep.start + beep.duration - 0.02);
+            gainNode.gain.linearRampToValueAtTime(0, now + beep.start + beep.duration);
+
+            oscillator.start(now + beep.start);
+            oscillator.stop(now + beep.start + beep.duration + 0.01);
+        });
+    }
+
+    function showSlide(n) {
+        document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+        document.getElementById('slide' + n).classList.add('active');
+        document.getElementById('slideNum').textContent = n + ' / ' + totalSlides;
+    }
+
+    function nextSlide() {
+        if (currentSlide < totalSlides) { currentSlide++; showSlide(currentSlide); }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 1) { currentSlide--; showSlide(currentSlide); }
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    function startTimer(timerId, totalSeconds) {
+        if (timerIntervals[timerId]) {
+            clearInterval(timerIntervals[timerId]);
+            timerIntervals[timerId] = null;
+        }
+
+        getAudioContext();
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+
+        let remaining = totalSeconds;
+        const display = document.getElementById(timerId);
+        display.classList.remove('timer-flash');
+
+        function updateDisplay() {
+            const mins = Math.floor(remaining / 60);
+            const secs = remaining % 60;
+            display.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+
+            if (remaining <= 10 && remaining > 0) {
+                display.style.color = '#ff6b6b';
+            }
+            if (remaining <= 0) {
+                clearInterval(timerIntervals[timerId]);
+                display.textContent = '⏰ TIME\'S UP!';
+                display.style.color = '#ff4757';
+                display.classList.add('timer-flash');
+                playAlarm();
+            }
+            remaining--;
+        }
+
+        display.style.color = '#fff';
+        updateDisplay();
+        timerIntervals[timerId] = setInterval(updateDisplay, 1000);
+    }
+</script>
+
+</body>
+</html>
