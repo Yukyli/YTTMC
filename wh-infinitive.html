@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wh-words + To-infinitives | F.2 English</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: #1a1a2e;
+    overflow: hidden;
+    height: 100vh;
+    color: #2d3748;
+  }
+
+  .presentation {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 3vh 5vw;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf3 100%);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .slide.active {
+    display: flex;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Slide 1 - Title */
+  .slide-title {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color: white;
+    text-align: center;
+  }
+  .slide-title .magnifier {
+    font-size: 6rem;
+    margin-bottom: 2rem;
+  }
+  .slide-title h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    font-weight: 800;
+  }
+  .slide-title h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #fde047;
+    font-weight: 700;
+  }
+  .slide-title p {
+    font-size: 1.5rem;
+    opacity: 0.9;
+    font-style: italic;
+  }
+
+  /* General slide structure */
+  .slide h1.slide-heading {
+    font-size: 2.8rem;
+    color: #1e3a8a;
+    margin-bottom: 2rem;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .slide h2.slide-subheading {
+    font-size: 2rem;
+    color: #1e3a8a;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+  }
+
+  /* Comparison boxes */
+  .compare-box {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+  .compare-item {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    max-width: 450px;
+    flex: 1;
+    min-width: 300px;
+  }
+  .compare-item.option-a { border-top: 6px solid #f59e0b; }
+  .compare-item.option-b { border-top: 6px solid #10b981; }
+  .compare-label {
+    font-weight: 800;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .option-a .compare-label { color: #f59e0b; }
+  .option-b .compare-label { color: #10b981; }
+  .compare-sentence {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+  }
+  .word-count {
+    font-size: 1rem;
+    color: #64748b;
+    font-style: italic;
+  }
+  .highlight-yellow { background: #fef08a; padding: 0 0.3rem; border-radius: 4px; font-weight: 600; }
+
+  .callout {
+    background: #dbeafe;
+    border-left: 6px solid #1e3a8a;
+    padding: 1.5rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1.4rem;
+    max-width: 800px;
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+
+  /* Goals list */
+  .goals-list {
+    list-style: none;
+    font-size: 1.6rem;
+    line-height: 2.5;
+  }
+  .goals-list li {
+    padding: 0.8rem 1.5rem;
+    background: white;
+    margin-bottom: 1rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-left: 6px solid #10b981;
+  }
+  .goals-list .check {
+    color: #10b981;
+    font-weight: 800;
+    margin-right: 0.8rem;
+  }
+
+  /* Formula */
+  .formula-box {
+    background: white;
+    padding: 2.5rem 3rem;
+    border-radius: 1rem;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+  .formula-table {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  .formula-cell {
+    background: white;
+    padding: 1.2rem 1.5rem;
+    border-radius: 0.6rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    min-width: 100px;
+  }
+  .formula-cell .word {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+  }
+  .formula-cell .label {
+    font-size: 0.9rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .color-subject { color: #2563eb; }
+  .color-verb { color: #059669; }
+  .color-wh { color: #dc2626; }
+  .color-to { color: #ea580c; }
+  .color-infverb { color: #7c3aed; }
+
+  /* Yes/No boxes */
+  .yes-no-container {
+    display: flex;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1000px;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .yes-box, .no-box {
+    flex: 1;
+    min-width: 300px;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  }
+  .yes-box {
+    background: #d1fae5;
+    border: 3px solid #10b981;
+  }
+  .no-box {
+    background: #fee2e2;
+    border: 3px solid #ef4444;
+  }
+  .yes-box .icon, .no-box .icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  .yes-box .words {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #065f46;
+    line-height: 2;
+  }
+  .no-box .words {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #991b1b;
+    text-decoration: line-through;
+  }
+
+  /* Examples table */
+  .examples-table {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+    font-size: 1.4rem;
+    width: 100%;
+    max-width: 700px;
+  }
+  .examples-table .row {
+    display: flex;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1rem 1.5rem;
+  }
+  .examples-table .row:last-child { border-bottom: none; }
+  .examples-table .row:nth-child(even) { background: #f8fafc; }
+  .examples-table .wh {
+    flex: 0 0 200px;
+    font-weight: 800;
+    color: #dc2626;
+  }
+  .examples-table .rest {
+    flex: 1;
+    color: #2d3748;
+  }
+  .examples-table .rest .to {
+    color: #ea580c;
+    font-weight: 700;
+  }
+  .intro-phrase {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1e3a8a;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Trigger verbs */
+  .trigger-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+    max-width: 800px;
+    margin-bottom: 1.5rem;
+  }
+  .trigger-verb {
+    background: white;
+    padding: 0.8rem 1.2rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2rem;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    border-left: 4px solid #3b82f6;
+  }
+  .exam-tip {
+    background: #fef3c7;
+    border: 3px solid #f59e0b;
+    padding: 1.5rem 2rem;
+    border-radius: 0.8rem;
+    font-size: 1.3rem;
+    max-width: 800px;
+    text-align: center;
+  }
+  .exam-tip .tip-label {
+    font-weight: 800;
+    color: #92400e;
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Also works with */
+  .also-works {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 850px;
+  }
+  .also-section {
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    border-left: 6px solid #3b82f6;
+  }
+  .also-section h3 {
+    font-size: 1.5rem;
+    color: #1e3a8a;
+    margin-bottom: 1rem;
+  }
+  .also-section .word-list {
+    font-weight: 700;
+    color: #7c3aed;
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+  }
+  .also-section .example {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #475569;
+    font-style: italic;
+  }
+  .also-section .example strong {
+    font-style: normal;
+    background: #fef08a;
+    padding: 0 0.3rem;
+    border-radius: 3px;
+  }
+
+  /* Practice */
+  .practice-list {
+    list-style: none;
+    font-size: 1.3rem;
+    max-width: 900px;
+    width: 100%;
+  }
+  .practice-list li {
+    background: white;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 0.8rem;
+    border-radius: 0.6rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    line-height: 1.8;
+  }
+  .practice-list .num {
+    font-weight: 800;
+    color: #1e3a8a;
+    margin-right: 0.5rem;
+  }
+  .practice-list .original strong {
+    background: #fee2e2;
+    padding: 0 0.3rem;
+    border-radius: 3px;
+  }
+  .practice-list .answer {
+    color: #059669;
+    font-weight: 700;
+    margin-top: 0.3rem;
+    display: none;
+  }
+  .practice-list .answer.revealed {
+    display: block;
+  }
+  .reveal-btn {
+    background: #1e3a8a;
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+  .reveal-btn:hover {
+    background: #1e40af;
+  }
+
+  /* Mistakes slides */
+  .wrong-right-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 900px;
+  }
+  .wrong-box, .right-box {
+    padding: 1.5rem 2rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+  .wrong-box {
+    background: #fee2e2;
+    border-left: 8px solid #ef4444;
+  }
+  .right-box {
+    background: #d1fae5;
+    border-left: 8px solid #10b981;
+  }
+  .wrong-box .label, .right-box .label {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 0.8rem;
+  }
+  .wrong-box .label { color: #991b1b; }
+  .right-box .label { color: #065f46; }
+  .wrong-box .sentence, .right-box .sentence {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    margin: 0.3rem 0;
+  }
+  .wrong-box .sentence strong { background: #fecaca; padding: 0 0.3rem; border-radius: 3px; }
+  .right-box .sentence strong { background: #a7f3d0; padding: 0 0.3rem; border-radius: 3px; font-weight: 800; color: #065f46; }
+
+  .rule-box {
+    background: #1e3a8a;
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 0.8rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 1.5rem;
+    max-width: 900px;
+  }
+  .rule-box .brain { font-size: 2rem; margin-right: 0.5rem; }
+
+  /* Summary */
+  .summary-list {
+    list-style: none;
+    width: 100%;
+    max-width: 900px;
+    font-size: 1.3rem;
+  }
+  .summary-list li {
+    background: white;
+    padding: 1.2rem 1.8rem;
+    margin-bottom: 0.8rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: flex-start;
+    line-height: 1.6;
+  }
+  .summary-list .number {
+    font-size: 2rem;
+    margin-right: 1rem;
+    font-weight: 800;
+  }
+  .summary-note {
+    color: #dc2626;
+    font-style: italic;
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 1.1rem;
+  }
+  .transition-call {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 1.5rem 2.5rem;
+    border-radius: 0.8rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    box-shadow: 0 10px 25px rgba(16,185,129,0.3);
+  }
+
+  /* Navigation */
+  .nav-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 100;
+    background: rgba(30,58,138,0.9);
+    padding: 10px 15px;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+  }
+  .nav-btn {
+    background: white;
+    color: #1e3a8a;
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover {
+    background: #fde047;
+    transform: scale(1.1);
+  }
+  .nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .slide-counter {
+    color: white;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 1rem;
+  }
+
+  .slide-number {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: rgba(30,58,138,0.1);
+    color: #1e3a8a;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .slide-title .slide-number {
+    color: white;
+    background: rgba(255,255,255,0.2);
+  }
+
+  /* Fullscreen btn */
+  .fullscreen-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(30,58,138,0.9);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    z-index: 100;
+  }
+
+  @media (max-width: 768px) {
+    .slide h1.slide-heading { font-size: 2rem; }
+    .slide-title h1 { font-size: 2.2rem; }
+    .slide-title h2 { font-size: 1.6rem; }
+    .formula-box { font-size: 1.3rem; padding: 1.5rem; }
+    .trigger-grid { grid-template-columns: repeat(2, 1fr); }
+    .formula-cell .word { font-size: 1.3rem; }
+    .intro-phrase { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="presentation">
+
+  <!-- SLIDE 1: TITLE -->
+  <section class="slide slide-title active">
+    <div class="slide-number">1 / 13</div>
+    <div class="magnifier">🔍</div>
+    <h1>"I don't know what to say!"</h1>
+    <h2>Wh-words + To-infinitives</h2>
+    <p>F.2 English Grammar</p>
+  </section>
+
+  <!-- SLIDE 2: WARM-UP -->
+  <section class="slide">
+    <div class="slide-number">2 / 13</div>
+    <h1 class="slide-heading">Warm-up: Which Sounds Better?</h1>
+    <div class="compare-box">
+      <div class="compare-item option-a">
+        <div class="compare-label">🅰️ Option A</div>
+        <div class="compare-sentence">I don't know <span class="highlight-yellow">what I should say</span> to her.</div>
+        <div class="word-count">(10 words)</div>
+      </div>
+      <div class="compare-item option-b">
+        <div class="compare-label">🅱️ Option B</div>
+        <div class="compare-sentence">I don't know <span class="highlight-yellow">what to say</span> to her.</div>
+        <div class="word-count">(8 words)</div>
+      </div>
+    </div>
+    <div class="callout">
+      💡 Same meaning. Fewer words. More fluent.<br>
+      <strong>Examiners reward this!</strong>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: GOALS -->
+  <section class="slide">
+    <div class="slide-number">3 / 13</div>
+    <h1 class="slide-heading">🎯 Today's Goals</h1>
+    <p style="font-size:1.3rem; margin-bottom:1.5rem; color:#475569;">By the end of this lesson, you will be able to:</p>
+    <ul class="goals-list">
+      <li><span class="check">✅</span> <strong>Recognise</strong> the Wh + to-infinitive structure</li>
+      <li><span class="check">✅</span> <strong>Transform</strong> long sentences into shorter ones</li>
+      <li><span class="check">✅</span> <strong>Avoid</strong> 3 common mistakes</li>
+      <li><span class="check">✅</span> <strong>Apply</strong> it in exam rewriting questions</li>
+    </ul>
+  </section>
+
+  <!-- SLIDE 4: FORMULA -->
+  <section class="slide">
+    <div class="slide-number">4 / 13</div>
+    <h1 class="slide-heading">🔑 The Magic Formula</h1>
+    <div class="formula-box">
+      <span class="color-subject">Subject</span> + 
+      <span class="color-verb">Verb</span> + 
+      <span class="color-wh">Wh-word</span> + 
+      <span class="color-to"><em>to</em></span> + 
+      <span class="color-infverb">Verb</span>...
+    </div>
+    <p style="font-size:1.3rem; color:#475569; margin: 1rem 0;"><strong>Example:</strong></p>
+    <div class="formula-table">
+      <div class="formula-cell">
+        <div class="word color-subject">I</div>
+        <div class="label">Subject</div>
+      </div>
+      <div class="formula-cell">
+        <div class="word color-verb">don't know</div>
+        <div class="label">Verb</div>
+      </div>
+      <div class="formula-cell">
+        <div class="word color-wh">what</div>
+        <div class="label">Wh-word</div>
+      </div>
+      <div class="formula-cell">
+        <div class="word color-to">to</div>
+        <div class="label">to</div>
+      </div>
+      <div class="formula-cell">
+        <div class="word color-infverb">say</div>
+        <div class="label">Verb</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: WHICH WH-WORDS -->
+  <section class="slide">
+    <div class="slide-number">5 / 13</div>
+    <h1 class="slide-heading">Which Wh-words Can We Use?</h1>
+    <div class="yes-no-container">
+      <div class="yes-box">
+        <div class="icon">✅</div>
+        <div style="font-size:1.2rem; font-weight:700; color:#065f46; margin-bottom:0.8rem;">YES — Use these:</div>
+        <div class="words">what • who • which<br>when • where • how</div>
+      </div>
+      <div class="no-box">
+        <div class="icon">❌</div>
+        <div style="font-size:1.2rem; font-weight:700; color:#991b1b; margin-bottom:0.8rem;">NO — Never with:</div>
+        <div class="words">why</div>
+      </div>
+    </div>
+    <div class="wrong-right-container" style="max-width:800px;">
+      <div class="wrong-box">
+        <span class="sentence">❌ I don't know <strong>why to go</strong>.</span>
+      </div>
+      <div class="right-box">
+        <span class="sentence">✅ I don't know <strong>why I should go</strong>.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: EXAMPLES TABLE -->
+  <section class="slide">
+    <div class="slide-number">6 / 13</div>
+    <h1 class="slide-heading">Examples</h1>
+    <div class="intro-phrase">"I don't know..."</div>
+    <div class="examples-table">
+      <div class="row"><div class="wh">what</div><div class="rest"><span class="to">to</span> say to her.</div></div>
+      <div class="row"><div class="wh">who</div><div class="rest"><span class="to">to</span> trust.</div></div>
+      <div class="row"><div class="wh">which course</div><div class="rest"><span class="to">to</span> choose.</div></div>
+      <div class="row"><div class="wh">when</div><div class="rest"><span class="to">to</span> tell him.</div></div>
+      <div class="row"><div class="wh">where</div><div class="rest"><span class="to">to</span> go.</div></div>
+      <div class="row"><div class="wh">how</div><div class="rest"><span class="to">to</span> do it.</div></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: TRIGGER VERBS -->
+  <section class="slide">
+    <div class="slide-number">7 / 13</div>
+    <h1 class="slide-heading">🚨 Trigger Verbs</h1>
+    <p style="font-size:1.2rem; margin-bottom:1.5rem; color:#475569;">These verbs often come BEFORE Wh + to-infinitive:</p>
+    <div class="trigger-grid">
+      <div class="trigger-verb">ask (sb)</div>
+      <div class="trigger-verb">explain</div>
+      <div class="trigger-verb">learn</div>
+      <div class="trigger-verb">choose</div>
+      <div class="trigger-verb">find out</div>
+      <div class="trigger-verb">remember</div>
+      <div class="trigger-verb">decide</div>
+      <div class="trigger-verb">forget</div>
+      <div class="trigger-verb">show (sb)</div>
+      <div class="trigger-verb">discover</div>
+      <div class="trigger-verb">know</div>
+      <div class="trigger-verb">teach (sb)</div>
+      <div class="trigger-verb">tell (sb)</div>
+      <div class="trigger-verb">understand</div>
+      <div class="trigger-verb">wonder</div>
+    </div>
+    <div class="exam-tip">
+      <span class="tip-label">🎯 EXAM TIP</span>
+      See these verbs in a rewriting question?<br>
+      <strong>→ Think Wh + to-infinitive!</strong>
+    </div>
+  </section>
+
+  <!-- SLIDE 8: ALSO WORKS WITH -->
+  <section class="slide">
+    <div class="slide-number">8 / 13</div>
+    <h1 class="slide-heading">Also Works With...</h1>
+    <div class="also-works">
+      <div class="also-section">
+        <h3>📌 Adjectives</h3>
+        <div class="word-list">clear • obvious • sure</div>
+        <div class="example">We are now all clear <strong>how to set up</strong> a tent properly.</div>
+      </div>
+      <div class="also-section">
+        <h3>📌 Phrases</h3>
+        <div class="word-list">have an idea • make up your mind</div>
+        <div class="example">I had no idea <strong>what to buy</strong> my dad for Father's Day.</div>
+        <div class="example">Have you made up your mind <strong>where to go</strong>?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 9: PRACTICE -->
+  <section class="slide">
+    <div class="slide-number">9 / 13</div>
+    <h1 class="slide-heading">Let's Practise Together!</h1>
+    <p style="font-size:1.2rem; margin-bottom:1.2rem; color:#475569;">Transform these sentences:</p>
+    <ul class="practice-list">
+      <li>
+        <div class="original"><span class="num">1.</span> I don't know <strong>where I should park</strong>.</div>
+        <div class="answer">→ I don't know <strong>where to park</strong>.</div>
+      </li>
+      <li>
+        <div class="original"><span class="num">2.</span> Tell me <strong>how I can solve</strong> this.</div>
+        <div class="answer">→ Tell me <strong>how to solve this</strong>.</div>
+      </li>
+      <li>
+        <div class="original"><span class="num">3.</span> She can't decide <strong>who she should invite</strong>.</div>
+        <div class="answer">→ She can't decide <strong>who to invite</strong>.</div>
+      </li>
+      <li>
+        <div class="original"><span class="num">4.</span> We haven't chosen <strong>which film we should watch</strong>.</div>
+        <div class="answer">→ We haven't chosen <strong>which film to watch</strong>.</div>
+      </li>
+    </ul>
+    <button class="reveal-btn" onclick="revealAnswers()">Reveal Answers ✨</button>
+  </section>
+
+  <!-- SLIDE 10: MISTAKE 1 -->
+  <section class="slide">
+    <div class="slide-number">10 / 13</div>
+    <h1 class="slide-heading">⚠️ Mistake #1: Word Order</h1>
+    <div class="wrong-right-container">
+      <div class="wrong-box">
+        <div class="label">❌ Wrong:</div>
+        <div class="sentence">I don't know <strong>to do what</strong>.</div>
+        <div class="sentence">I don't know <strong>what I to do</strong>.</div>
+      </div>
+      <div class="right-box">
+        <div class="label">✅ Correct:</div>
+        <div class="sentence">I don't know <strong>what to do</strong>.</div>
+      </div>
+    </div>
+    <div class="rule-box"><span class="brain">🧠</span> Wh-word FIRST, then <em>to</em> + verb</div>
+  </section>
+
+  <!-- SLIDE 11: MISTAKE 2 -->
+  <section class="slide">
+    <div class="slide-number">11 / 13</div>
+    <h1 class="slide-heading">⚠️ Mistake #2: Negative Form</h1>
+    <div class="rule-box" style="margin-top:0; margin-bottom:1.5rem;">
+      Wh-word + <span style="color:#fde047;">not</span> + to + verb
+    </div>
+    <div class="wrong-right-container">
+      <div class="wrong-box">
+        <div class="label">❌ Wrong:</div>
+        <div class="sentence">The mother told the child where <strong>to not</strong> go.</div>
+      </div>
+      <div class="right-box">
+        <div class="label">✅ Correct:</div>
+        <div class="sentence">The mother told the child where <strong>not to</strong> go.</div>
+        <div class="sentence">He learned <strong>what not to say</strong> in an interview.</div>
+        <div class="sentence">I know <strong>who not to trust</strong>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 12: MISTAKE 3 -->
+  <section class="slide">
+    <div class="slide-number">12 / 13</div>
+    <h1 class="slide-heading">⚠️ Mistake #3: Using "why"</h1>
+    <div class="wrong-right-container">
+      <div class="wrong-box">
+        <div class="label">❌ Wrong:</div>
+        <div class="sentence">I don't know <strong>why to leave</strong>.</div>
+      </div>
+      <div class="right-box">
+        <div class="label">✅ Correct:</div>
+        <div class="sentence">I don't know <strong>why I should leave</strong>.</div>
+      </div>
+    </div>
+    <div class="rule-box" style="background:#991b1b;">
+      🚫 NO "why" with to-infinitive!
+    </div>
+  </section>
+
+  <!-- SLIDE 13: SUMMARY -->
+  <section class="slide">
+    <div class="slide-number">13 / 13</div>
+    <h1 class="slide-heading">🎯 Today's Summary</h1>
+    <ul class="summary-list">
+      <li>
+        <span class="number">1️⃣</span>
+        <div><strong>Formula:</strong> Wh-word + <em>to</em> + verb</div>
+      </li>
+      <li>
+        <span class="number">2️⃣</span>
+        <div><strong>Works with:</strong> what, who, which, when, where, how
+          <span class="summary-note">❌ NOT with "why"</span>
+        </div>
+      </li>
+      <li>
+        <span class="number">3️⃣</span>
+        <div><strong>Negative:</strong> Wh-word + <strong style="color:#dc2626;">not</strong> + to + verb</div>
+      </li>
+      <li>
+        <span class="number">4️⃣</span>
+        <div><strong>Trigger verbs</strong> = exam signal!
+          <span class="summary-note" style="color:#475569;">(ask, decide, know, learn, show, teach, tell, wonder...)</span>
+        </div>
+      </li>
+    </ul>
+    <div class="transition-call">📝 Now open your worksheet! →</div>
+  </section>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav-controls">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">◀</button>
+  <span class="slide-counter"><span id="currentNum">1</span> / 13</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">▶</button>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+
+  function showSlide(n) {
+    slides.forEach(s => s.classList.remove('active'));
+    currentSlide = (n + totalSlides) % totalSlides;
+    slides[currentSlide].classList.add('active');
+    document.getElementById('currentNum').textContent = currentSlide + 1;
+    document.getElementById('prevBtn').disabled = currentSlide === 0;
+    document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+  }
+
+  function changeSlide(n) {
+    showSlide(currentSlide + n);
+  }
+
+  function revealAnswers() {
+    document.querySelectorAll('.practice-list .answer').forEach(a => {
+      a.classList.add('revealed');
+    });
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);
+    if (e.key === 'ArrowLeft') changeSlide(-1);
+    if (e.key === 'Home') showSlide(0);
+    if (e.key === 'End') showSlide(totalSlides - 1);
+  });
+
+  showSlide(0);
+</script>
+
+</body>
+</html>
