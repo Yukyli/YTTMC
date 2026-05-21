@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rhyming Class Games</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Verdana', 'Comic Sans MS', sans-serif;
+    background: linear-gradient(135deg, #B4E5FF, #E1BEE7);
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    font-size: 22px;
+  }
+  header {
+    background: linear-gradient(135deg, #29B6F6, #EC407A);
+    color: white;
+    text-align: center;
+    padding: 25px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  }
+  h1 { font-size: 2.6em; margin: 0; }
+  
+  .scoreboard {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .team {
+    background: white;
+    padding: 12px 25px;
+    border-radius: 15px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    text-align: center;
+    min-width: 160px;
+  }
+  .team.red { border-top: 8px solid #E74C3C; }
+  .team.blue { border-top: 8px solid #3498DB; }
+  .team.green { border-top: 8px solid #27AE60; }
+  .team .name { font-weight: bold; font-size: 1.2em; }
+  .team .score { font-size: 2.5em; color: #2C3E50; font-weight: bold; }
+  .team button {
+    font-size: 18px;
+    padding: 5px 15px;
+    margin: 3px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .team .plus { background: #A5D6A7; }
+  .team .minus { background: #EF9A9A; }
+  
+  .game {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  .game-title {
+    display: inline-block;
+    background: #FFD93D;
+    padding: 10px 25px;
+    border-radius: 30px;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .instructions {
+    background: #E1F5FE;
+    padding: 15px 20px;
+    border-radius: 10px;
+    border-left: 6px solid #0288D1;
+    margin-bottom: 15px;
+    font-size: 1.05em;
+  }
+  
+  .big-btn {
+    font-size: 1.5em;
+    padding: 15px 35px;
+    margin: 8px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+    color: white;
+  }
+  .next-btn { background: #27AE60; box-shadow: 0 5px 0 #1B5E20; }
+  .next-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #1B5E20; }
+  .speak-btn { background: #0288D1; box-shadow: 0 5px 0 #01579B; }
+  .speak-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #01579B; }
+  .control-row { text-align: center; margin: 15px 0; }
+  
+  /* GAME 1: MEMORY MATCH (Snap-style) */
+  .memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+  }
+  .memory-card {
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, #7E57C2, #5E35B1);
+    color: white;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+    user-select: none;
+    text-align: center;
+    padding: 10px;
+  }
+  .memory-card:hover { transform: scale(1.05); }
+  .memory-card.flipped {
+    background: white;
+    color: #2C3E50;
+    border: 4px solid #FFB300;
+  }
+  .memory-card.matched {
+    background: #A5D6A7;
+    color: #1B5E20;
+    cursor: default;
+    animation: matchPop 0.6s;
+  }
+  @keyframes matchPop {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15) rotate(5deg); }
+  }
+  
+  /* GAME 2: I-SPY */
+  .ispy-prompt {
+    text-align: center;
+    background: linear-gradient(135deg, #FFE082, #FFAB91);
+    padding: 30px;
+    border-radius: 20px;
+    margin: 15px 0;
+  }
+  .ispy-prompt p {
+    font-size: 1.5em;
+    margin: 10px 0;
+    font-style: italic;
+  }
+  .ispy-target {
+    font-size: 3em;
+    font-weight: bold;
+    color: #BF360C;
+    letter-spacing: 4px;
+  }
+  
+  .ispy-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+  }
+  .ispy-card {
+    aspect-ratio: 1;
+    background: white;
+    border: 4px solid #5E35B1;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 10px;
+    text-align: center;
+  }
+  .ispy-card .emoji { font-size: 3em; }
+  .ispy-card:hover { background: #EDE7F6; transform: translateY(-5px); }
+  .ispy-card.correct { background: #A5D6A7; border-color: #1B5E20; animation: matchPop 0.6s; }
+  .ispy-card.wrong { background: #EF9A9A; border-color: #B71C1C; animation: shake 0.4s; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); } 75% { transform: translateX(8px); }
+  }
+  
+  /* GAME 3: DOMINOES */
+  .domino-area {
+    background: #E8F5E9;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    min-height: 250px;
+  }
+  .domino-chain {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+    min-height: 130px;
+  }
+  .domino {
+    display: flex;
+    background: white;
+    border: 3px solid #2C3E50;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    min-width: 200px;
+    height: 100px;
+  }
+  .domino-half {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4em;
+    font-weight: bold;
+    padding: 5px;
+    text-align: center;
+  }
+  .domino-half.left { background: #FFF3E0; border-right: 2px dashed #2C3E50; }
+  .domino-half.right { background: #E1F5FE; }
+  .domino-half .emoji { font-size: 2em; }
+  
+  .domino-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 15px 0;
+  }
+  .domino-choice {
+    background: white;
+    border: 3px solid #FB8C00;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    height: 90px;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+  .domino-choice:hover { transform: scale(1.05); }
+  .domino-choice.correct { border-color: #1B5E20; animation: matchPop 0.5s; }
+  .domino-choice.wrong { border-color: #B71C1C; animation: shake 0.4s; }
+  
+  .next-card-prompt {
+    text-align: center;
+    font-size: 1.4em;
+    background: #FFFDE7;
+    padding: 15px;
+    border-radius: 12px;
+    margin: 15px 0;
+  }
+  
+  .feedback {
+    text-align: center;
+    font-size: 1.6em;
+    font-weight: bold;
+    min-height: 50px;
+    margin: 10px 0;
+  }
+  
+  @media (max-width: 768px) {
+    .memory-grid { grid-template-columns: repeat(3, 1fr); }
+    .ispy-options { grid-template-columns: repeat(2, 1fr); }
+    .domino-options { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎵 Rhyming Class Games 🎵</h1>
+  <p style="font-size:1.2em; margin: 8px 0 0 0;">Match · Spy · Domino — Find the Rhymes!</p>
+</header>
+
+<!-- SCOREBOARD -->
+<div class="scoreboard">
+  <div class="team red">
+    <div class="name">🔴 Red Team</div>
+    <div class="score" id="scoreRed">0</div>
+    <button class="plus" onclick="changeScore('Red', 1)">+1</button>
+    <button class="minus" onclick="changeScore('Red', -1)">−1</button>
+  </div>
+  <div class="team blue">
+    <div class="name">🔵 Blue Team</div>
+    <div class="score" id="scoreBlue">0</div>
+    <button class="plus" onclick="changeScore('Blue', 1)">+1</button>
+    <button class="minus" onclick="changeScore('Blue', -1)">−1</button>
+  </div>
+  <div class="team green">
+    <div class="name">🟢 Green Team</div>
+    <div class="score" id="scoreGreen">0</div>
+    <button class="plus" onclick="changeScore('Green', 1)">+1</button>
+    <button class="minus" onclick="changeScore('Green', -1)">−1</button>
+  </div>
+</div>
+
+<!-- ============ GAME 1: RHYMING SNAP / MEMORY MATCH ============ -->
+<div class="game">
+  <div class="game-title">🃏 Game 1: Rhyming Snap Match</div>
+  <div class="instructions">
+    <b>How to play:</b> Click a card to flip it. Click another card. 
+    If the two words <b>rhyme</b>, they're a match! Find all the rhyming pairs!
+  </div>
+  
+  <div class="memory-grid" id="memoryGrid"></div>
+  <div class="feedback" id="memoryFeedback">Pairs found: 0 / 6</div>
+  
+  <div class="control-row">
+    <button class="big-btn next-btn" onclick="newMemory()">🔄 New Game</button>
+  </div>
+</div>
+
+<!-- ============ GAME 2: I-SPY RHYMES ============ -->
+<div class="game">
+  <div class="game-title">👀 Game 2: I Spy a Rhyme</div>
+  <div class="instructions">
+    <b>How to play:</b> Read the I-Spy clue! Then click the picture that <b>rhymes</b> 
+    with the target word. Hint: try saying each option out loud!
+  </div>
+  
+  <div class="ispy-prompt">
+    <p>I spy with my little eye... 👁️</p>
+    <p>...something that rhymes with</p>
+    <div class="ispy-target" id="ispyTarget">CHAIR</div>
+    <button class="big-btn speak-btn" onclick="speakIspy()" style="font-size:1.1em; padding:10px 20px;">🔊 Say it</button>
+  </div>
+  
+  <div class="ispy-options" id="ispyOptions"></div>
+  <div class="feedback" id="ispyFeedback"></div>
+  
+  <div class="control-row">
+    <button class="big-btn next-btn" onclick="nextIspy()">➡ Next Clue</button>
+  </div>
+</div>
+
+<!-- ============ GAME 3: RHYMING DOMINOES ============ -->
+<div class="game">
+  <div class="game-title">🁢 Game 3: Rhyming Dominoes</div>
+  <div class="instructions">
+    <b>How to play:</b> Build a chain of dominoes! Click the domino that 
+    <b>rhymes</b> with the right side of the last one. Try to build the longest chain!
+  </div>
+  
+  <div class="domino-area">
+    <p style="text-align:center; font-weight:bold; color:#2E7D32; font-size:1.2em;">
+      Chain length: <span id="chainLen">1</span> 🌟
+    </p>
+    <div class="domino-chain" id="dominoChain"></div>
+  </div>
+  
+  <div class="next-card-prompt">
+    Find a domino with a word that rhymes with: 
+    <span style="font-weight:bold; color:#BF360C; font-size:1.3em;" id="rhymeTargetD">—</span>
+  </div>
+  
+  <div class="domino-options" id="dominoOptions"></div>
+  <div class="feedback" id="dominoFeedback"></div>
+  
+  <div class="control-row">
+    <button class="big-btn next-btn" onclick="resetDominoes()">🔄 New Chain</button>
+  </div>
+</div>
+
+<script>
+/* ---------- SCOREBOARD & SOUND ---------- */
+const scores = { Red: 0, Blue: 0, Green: 0 };
+function changeScore(team, val) {
+  scores[team] = Math.max(0, scores[team] + val);
+  document.getElementById('score' + team).textContent = scores[team];
+}
+function speak(text, rate=0.85) {
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = rate;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+function cheer() { speak("Well done!", 1.1); }
+
+/* ---------- GAME 1: RHYMING SNAP MEMORY ---------- */
+// Pairs of rhyming words
+const rhymePairs = [
+  ['cat 🐱', 'hat 🎩'],
+  ['dog 🐶', 'log 🪵'],
+  ['bee 🐝', 'tree 🌳'],
+  ['star ⭐', 'car 🚗'],
+  ['sun ☀️', 'bun 🍔'],
+  ['cake 🍰', 'snake 🐍'],
+  ['fish 🐟', 'dish 🍽️'],
+  ['frog 🐸', 'dog 🐶'],
+  ['mouse 🐭', 'house 🏠'],
+  ['cup ☕', 'pup 🐕'],
+  ['ring 💍', 'king 👑'],
+  ['ball ⚽', 'wall 🧱']
+];
+
+let flipped = [], matched = 0, totalPairs = 0, lock = false;
+
+function newMemory() {
+  // Pick 6 random pairs
+  const chosen = [...rhymePairs].sort(() => Math.random() - 0.5).slice(0, 6);
+  totalPairs = 6;
+  matched = 0;
+  flipped = [];
+  
+  // Build cards (12 total)
+  let cards = [];
+  chosen.forEach((pair, i) => {
+    cards.push({ word: pair[0], group: i });
+    cards.push({ word: pair[1], group: i });
+  });
+  cards = cards.sort(() => Math.random() - 0.5);
+  
+  const grid = document.getElementById('memoryGrid');
+  grid.innerHTML = '';
+  cards.forEach((c, i) => {
+    const div = document.createElement('div');
+    div.className = 'memory-card';
+    div.dataset.group = c.group;
+    div.dataset.word = c.word;
+    div.dataset.idx = i;
+    div.textContent = '?';
+    div.onclick = () => flipCard(div);
+    grid.appendChild(div);
+  });
+  
+  document.getElementById('memoryFeedback').textContent = 'Pairs found: 0 / 6';
+}
+
+function flipCard(card) {
+  if (lock) return;
+  if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+  
+  card.classList.add('flipped');
+  card.textContent = card.dataset.word;
+  // speak just the word part (before space/emoji)
+  speak(card.dataset.word.split(' ')[0]);
+  flipped.push(card);
+  
+  if (flipped.length === 2) {
+    lock = true;
+    setTimeout(checkMatch, 1000);
+  }
+}
+
+function checkMatch() {
+  const fb = document.getElementById('memoryFeedback');
+  if (flipped[0].dataset.group === flipped[1].dataset.group) {
+    flipped.forEach(c => c.classList.add('matched'));
+    matched++;
+    fb.textContent = '🎉 RHYME! Pairs found: ' + matched + ' / ' + totalPairs;
+    fb.style.color = '#27AE60';
+    cheer();
+    if (matched === totalPairs) {
+      fb.textContent = '🏆 ALL RHYMES FOUND! Brilliant!';
+    }
+  } else {
+    flipped.forEach(c => {
+      c.classList.remove('flipped');
+      c.textContent = '?';
+    });
+    fb.textContent = '❌ Not a rhyme. Try again! (' + matched + ' / ' + totalPairs + ')';
+    fb.style.color = '#C62828';
+  }
+  flipped = [];
+  lock = false;
+}
+
+newMemory();
+
+/* ---------- GAME 2: I-SPY RHYMES ---------- */
+const ispyRounds = [
+  { 
+    target: 'CHAIR', 
+    options: [
+      { emoji: '💇', word: 'hair', correct: true },
+      { emoji: '🐱', word: 'cat', correct: false },
+      { emoji: '🚌', word: 'bus', correct: false }
+    ]
+  },
+  {
+    target: 'CAT',
+    options: [
+      { emoji: '🐶', word: 'dog', correct: false },
+      { emoji: '🎩', word: 'hat', correct: true },
+      { emoji: '🐟', word: 'fish', correct: false }
+    ]
+  },
+  {
+    target: 'STAR',
+    options: [
+      { emoji: '🚗', word: 'car', correct: true },
+      { emoji: '✏️', word: 'pen', correct: false },
+      { emoji: '📖', word: 'book', correct: false }
+    ]
+  },
+  {
+    target: 'TREE',
+    options: [
+      { emoji: '🐶', word: 'dog', correct: false },
+      { emoji: '🐝', word: 'bee', correct: true },
+      { emoji: '🌞', word: 'sun', correct: false }
+    ]
+  },
+  {
+    target: 'CAKE',
+    options: [
+      { emoji: '🐍', word: 'snake', correct: true },
+      { emoji: '🐱', word: 'cat', correct: false },
+      { emoji: '🐰', word: 'rabbit', correct: false }
+    ]
+  },
+  {
+    target: 'SUN',
+    options: [
+      { emoji: '🐟', word: 'fish', correct: false },
+      { emoji: '🍔', word: 'bun', correct: true },
+      { emoji: '🌳', word: 'tree', correct: false }
+    ]
+  },
+  {
+    target: 'MOUSE',
+    options: [
+      { emoji: '🏠', word: 'house', correct: true },
+      { emoji: '🚗', word: 'car', correct: false },
+      { emoji: '🐶', word: 'dog', correct: false }
+    ]
+  },
+  {
+    target: 'KING',
+    options: [
+      { emoji: '🐱', word: 'cat', correct: false },
+      { emoji: '💍', word: 'ring', correct: true },
+      { emoji: '🌳', word: 'tree', correct: false }
+    ]
+  },
+  {
+    target: 'BALL',
+    options: [
+      { emoji: '🧱', word: 'wall', correct: true },
+      { emoji: '🐝', word: 'bee', correct: false },
+      { emoji: '🐟', word: 'fish', correct: false }
+    ]
+  }
+];
+let ispyIdx = 0;
+
+function loadIspy() {
+  const r = ispyRounds[ispyIdx];
+  document.getElementById('ispyTarget').textContent = r.target;
+  document.getElementById('ispyFeedback').textContent = '';
+  
+  const opts = document.getElementById('ispyOptions');
+  opts.innerHTML = '';
+  // shuffle options
+  const shuffled = [...r.options].sort(() => Math.random() - 0.5);
+  shuffled.forEach(opt => {
+    const div = document.createElement('div');
+    div.className = 'ispy-card';
+    div.innerHTML = '<div class="emoji">' + opt.emoji + '</div><div>' + opt.word + '</div>';
+    div.onclick = () => {
+      speak(opt.word);
+      const fb = document.getElementById('ispyFeedback');
+      if (opt.correct) {
+        div.classList.add('correct');
+        fb.textContent = '🎉 YES! ' + r.target + ' rhymes with ' + opt.word.toUpperCase() + '!';
+        fb.style.color = '#27AE60';
+        cheer();
+      } else {
+        div.classList.add('wrong');
+        fb.textContent = '❌ Listen again!';
+        fb.style.color = '#C62828';
+        setTimeout(() => div.classList.remove('wrong'), 600);
+      }
+    };
+    opts.appendChild(div);
+  });
+}
+
+function speakIspy() { speak(ispyRounds[ispyIdx].target); }
+function nextIspy() {
+  ispyIdx = (ispyIdx + 1) % ispyRounds.length;
+  loadIspy();
+}
+loadIspy();
+
+/* ---------- GAME 3: RHYMING DOMINOES ---------- */
+// Each domino has [word/picture left, word/picture right]
+// We match by rhyme group
+const dominoBank = [
+  { left: { txt: 'cup', emoji: '☕' }, right: { txt: 'dog', emoji: '🐶' }, leftRhyme: 'up', rightRhyme: 'og' },
+  { left: { txt: 'frog', emoji: '🐸' }, right: { txt: 'house', emoji: '🏠' }, leftRhyme: 'og', rightRhyme: 'ouse' },
+  { left: { txt: 'mouse', emoji: '🐭' }, right: { txt: 'cake', emoji: '🍰' }, leftRhyme: 'ouse', rightRhyme: 'ake' },
+  { left: { txt: 'snake', emoji: '🐍' }, right: { txt: 'star', emoji: '⭐' }, leftRhyme: 'ake', rightRhyme: 'ar' },
+  { left: { txt: 'car', emoji: '🚗' }, right: { txt: 'bee', emoji: '🐝' }, leftRhyme: 'ar', rightRhyme: 'ee' },
+  { left: { txt: 'tree', emoji: '🌳' }, right: { txt: 'cat', emoji: '🐱' }, leftRhyme: 'ee', rightRhyme: 'at' },
+  { left: { txt: 'hat', emoji: '🎩' }, right: { txt: 'sun', emoji: '☀️' }, leftRhyme: 'at', rightRhyme: 'un' },
+  { left: { txt: 'bun', emoji: '🍔' }, right: { txt: 'king', emoji: '👑' }, leftRhyme: 'un', rightRhyme: 'ing' },
+  { left: { txt: 'ring', emoji: '💍' }, right: { txt: 'ball', emoji: '⚽' }, leftRhyme: 'ing', rightRhyme: 'all' },
+  { left: { txt: 'wall', emoji: '🧱' }, right: { txt: 'pup', emoji: '🐕' }, leftRhyme: 'all', rightRhyme: 'up' },
+  // distractors
+  { left: { txt: 'fish', emoji: '🐟' }, right: { txt: 'book', emoji: '📖' }, leftRhyme: 'ish', rightRhyme: 'ook' },
+  { left: { txt: 'pen', emoji: '✏️' }, right: { txt: 'box', emoji: '📦' }, leftRhyme: 'en', rightRhyme: 'ox' }
+];
+
+let chain = [], chainLength = 0, currentRhyme = '';
+
+function makeDominoHTML(d) {
+  return '<div class="domino-half left"><span class="emoji">' + d.left.emoji + '</span></div>' +
+         '<div class="domino-half right">' + d.right.txt + '</div>';
+}
+
+function resetDominoes() {
+  // Start with random first domino
+  const start = dominoBank[Math.floor(Math.random() * 10)];
+  chain = [start];
+  chainLength = 1;
+  currentRhyme = start.rightRhyme;
+  
+  const chainDiv = document.getElementById('dominoChain');
+  chainDiv.innerHTML = '';
+  const d = document.createElement('div');
+  d.className = 'domino';
+  d.innerHTML = makeDominoHTML(start);
+  chainDiv.appendChild(d);
+  
+  document.getElementById('chainLen').textContent = chainLength;
+  document.getElementById('rhymeTargetD').textContent = start.right.txt.toUpperCase();
+  document.getElementById('dominoFeedback').textContent = '';
+  
+  loadDominoOptions();
+}
+
+function loadDominoOptions() {
+  const opts = document.getElementById('dominoOptions');
+  opts.innerHTML = '';
+  
+  // Find correct domino (left side matches currentRhyme), and 2 wrong ones
+  const correctOnes = dominoBank.filter(d => d.leftRhyme === currentRhyme && !chain.includes(d));
+  const wrongOnes = dominoBank.filter(d => d.leftRhyme !== currentRhyme && !chain.includes(d));
+  
+  let display = [];
+  if (correctOnes.length > 0) {
+    display.push(correctOnes[Math.floor(Math.random() * correctOnes.length)]);
+  } else {
+    // No more matches possible - end chain
+    document.getElementById('dominoFeedback').textContent = '🏆 Chain complete! Length: ' + chainLength;
+    document.getElementById('dominoFeedback').style.color = '#27AE60';
+    cheer();
+    return;
+  }
+  
+  // Add 2 wrong distractors
+  const shuffledWrong = wrongOnes.sort(() => Math.random() - 0.5).slice(0, 2);
+  display = display.concat(shuffledWrong).sort(() => Math.random() - 0.5);
+  
+  display.forEach(d => {
+    const div = document.createElement('div');
+    div.className = 'domino-choice';
+    div.innerHTML = makeDominoHTML(d);
+    div.onclick = () => pickDomino(d, div);
+    opts.appendChild(div);
+  });
+}
+
+function pickDomino(d, el) {
+  const fb = document.getElementById('dominoFeedback');
+  if (d.leftRhyme === currentRhyme) {
+    // correct! add to chain
+    el.classList.add('correct');
+    chain.push(d);
+    chainLength++;
+    currentRhyme = d.rightRhyme;
+    
+    setTimeout(() => {
+      const chainDiv = document.getElementById('dominoChain');
+      const newD = document.createElement('div');
+      newD.className = 'domino';
+      newD.innerHTML = makeDominoHTML(d);
+      chainDiv.appendChild(newD);
+      document.getElementById('chainLen').textContent = chainLength;
+      document.getElementById('rhymeTargetD').textContent = d.right.txt.toUpperCase();
+      fb.textContent = '🎉 RHYME! Chain getting longer!';
+      fb.style.color = '#27AE60';
+      cheer();
+      loadDominoOptions();
+    }, 600);
+  } else {
+    el.classList.add('wrong');
+    fb.textContent = '❌ Not a rhyme! Try again!';
+    fb.style.color = '#C62828';
+    setTimeout(() => el.classList.remove('wrong'), 600);
+  }
+}
+
+resetDominoes();
+</script>
+
+</body>
+</html>
