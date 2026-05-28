@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fun with Reading & Writing — SEN Lesson</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Verdana', 'Comic Sans MS', sans-serif;
+    background: linear-gradient(135deg, #FFE5F1, #E0F7FA, #FFF9C4);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-size: 22px;
+    color: #1A237E;
+  }
+  
+  /* ============ NAVIGATION ============ */
+  .nav-bar {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(135deg, #5E60CE, #7400B8);
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 100;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  .nav-btn {
+    background: white;
+    color: #5E60CE;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 3px 0 #311B92;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: #FFD93D; }
+  .nav-btn.active { background: #FFD93D; color: #C62828; }
+  
+  /* ============ MAIN LAYOUT ============ */
+  .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+  .slide { display: none; animation: fadeIn 0.4s; }
+  .slide.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  header.title-banner {
+    background: linear-gradient(135deg, #FF6B9D, #5E60CE);
+    color: white;
+    text-align: center;
+    padding: 30px;
+    border-radius: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  }
+  h1 { font-size: 2.5em; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+  
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  
+  h2.section-title {
+    background: linear-gradient(135deg, #FFD93D, #FFB300);
+    color: #BF360C;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-size: 1.5em;
+    display: inline-block;
+    margin: 0 0 20px 0;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  }
+  
+  .instructions {
+    background: linear-gradient(135deg, #FFF9C4, #FFE082);
+    padding: 20px 25px;
+    border-radius: 15px;
+    border-left: 8px solid #F57F17;
+    font-size: 1.15em;
+    line-height: 1.5;
+  }
+  
+  /* ============ TAKE AWAY GAME ============ */
+  .takeaway-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    background: #E1F5FE;
+    border-radius: 18px;
+    padding: 18px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+  }
+  .word-box {
+    background: white;
+    border: 4px solid #0277BD;
+    border-radius: 15px;
+    padding: 15px 25px;
+    font-size: 1.6em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #01579B;
+    min-width: 130px;
+    text-align: center;
+  }
+  .word-box:hover { background: #FFF3E0; }
+  .word-box .first { color: #C62828; }
+  .word-box .rest { color: #2E7D32; }
+  .arrow {
+    font-size: 2em;
+    color: #FF6F00;
+    font-weight: bold;
+  }
+  .takeaway-result {
+    background: #FFF59D;
+    border: 4px dashed #F57F17;
+    border-radius: 15px;
+    padding: 15px 25px;
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #2E7D32;
+    min-width: 100px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .takeaway-result.hidden { color: transparent; }
+  .takeaway-result.hidden::after { content: "?"; color: #F57F17; }
+  
+  /* ============ RHYMING WORDS BUILDER ============ */
+  .rhyme-builder {
+    background: #F3E5F5;
+    border-radius: 20px;
+    padding: 25px;
+    margin: 20px 0;
+  }
+  .letter-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 15px 0;
+  }
+  .letter-tile {
+    background: white;
+    border: 4px solid #6A1B9A;
+    border-radius: 12px;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #4A148C;
+    user-select: none;
+  }
+  .letter-tile:hover { background: #FFD93D; transform: translateY(-3px); }
+  .letter-tile.selected { background: #FFD93D; }
+  .letter-tile.used { opacity: 0.3; pointer-events: none; }
+  
+  .ending-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .slot-box {
+    background: white;
+    border: 4px dashed #6A1B9A;
+    border-radius: 12px;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #6A1B9A;
+  }
+  .slot-box.filled {
+    border-style: solid;
+    background: #FFD93D;
+  }
+  .ending-label {
+    background: #4CAF50;
+    color: white;
+    border-radius: 12px;
+    padding: 15px 25px;
+    font-size: 2em;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  /* ============ RHYME DETECTIVE / TEST ============ */
+  .test-pair {
+    background: #E8F5E9;
+    border-radius: 18px;
+    padding: 20px;
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  .test-words {
+    display: flex;
+    gap: 15px;
+    flex: 1;
+    justify-content: center;
+  }
+  .test-word {
+    background: white;
+    border: 3px solid #2E7D32;
+    border-radius: 12px;
+    padding: 12px 22px;
+    font-size: 1.4em;
+    font-weight: bold;
+    cursor: pointer;
+    min-width: 110px;
+    text-align: center;
+  }
+  .test-word:hover { background: #FFF3E0; }
+  
+  .yn-btn {
+    border: none;
+    padding: 14px 28px;
+    border-radius: 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    font-family: inherit;
+    margin: 4px;
+  }
+  .yes-btn { background: #43A047; box-shadow: 0 4px 0 #1B5E20; }
+  .no-btn { background: #E53935; box-shadow: 0 4px 0 #B71C1C; }
+  .yn-btn:active { transform: translateY(2px); }
+  .yn-btn.correct { background: #FFD93D !important; color: #1B5E20; }
+  .yn-btn.wrong { opacity: 0.4; }
+  
+  .feedback-icon {
+    font-size: 2em;
+    min-width: 50px;
+    text-align: center;
+  }
+  
+  /* ============ JUMBLED JUNGLE ============ */
+  .animal-card {
+    background: linear-gradient(135deg, #FFCCBC, #FFAB91);
+    border: 4px solid #BF360C;
+    border-radius: 18px;
+    padding: 20px;
+    margin: 10px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #8D2A0F;
+    display: inline-block;
+    min-width: 220px;
+    transition: all 0.2s;
+  }
+  .animal-card:hover { transform: translateY(-3px); }
+  .animal-emoji { font-size: 3.5em; line-height: 1; }
+  .animal-word {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #BF360C;
+    margin-top: 5px;
+  }
+  .animal-syllables {
+    margin-top: 10px;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .syllable-chunk {
+    background: white;
+    border: 3px solid #BF360C;
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #6A1B9A;
+  }
+  .clap-counter {
+    margin-top: 8px;
+    font-size: 1.2em;
+    color: #1B5E20;
+    font-weight: bold;
+  }
+  
+  .animal-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  /* ============ GAMES SECTION ============ */
+  .game-card {
+    background: linear-gradient(135deg, #B3E5FC, #81D4FA);
+    border-radius: 25px;
+    padding: 25px;
+    margin: 20px 0;
+    border: 5px solid #0277BD;
+  }
+  .game-title {
+    font-size: 1.6em;
+    color: #01579B;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 0 15px 0;
+  }
+  
+  .scoreboard {
+    display: flex;
+    justify-content: space-around;
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+    border: 3px solid #0277BD;
+  }
+  .team-score {
+    text-align: center;
+    flex: 1;
+  }
+  .team-name {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  .team-points {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #C62828;
+  }
+  .team-a { color: #1976D2; }
+  .team-b { color: #C2185B; }
+  .add-point-btn {
+    background: #FFD93D;
+    border: 3px solid #F57F17;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 5px;
+    font-family: inherit;
+  }
+  
+  .game-display {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    margin: 15px 0;
+    min-height: 200px;
+  }
+  .big-word {
+    font-size: 4em;
+    font-weight: bold;
+    color: #5E35B1;
+    margin: 15px 0;
+    letter-spacing: 0.05em;
+  }
+  
+  .control-btn {
+    background: #5E35B1;
+    color: white;
+    border: none;
+    padding: 15px 35px;
+    border-radius: 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 8px;
+    box-shadow: 0 4px 0 #311B92;
+    font-family: inherit;
+  }
+  .control-btn:active { transform: translateY(2px); }
+  .control-btn.green { background: #43A047; box-shadow: 0 4px 0 #1B5E20; }
+  .control-btn.orange { background: #FB8C00; box-shadow: 0 4px 0 #BF360C; }
+  
+  .feedback-big {
+    font-size: 1.6em;
+    font-weight: bold;
+    text-align: center;
+    margin: 15px 0;
+    min-height: 50px;
+  }
+  
+  .speak-icon {
+    display: inline-block;
+    background: #0288D1;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 45px;
+    cursor: pointer;
+    font-size: 1.3em;
+    border: none;
+  }
+  .speak-icon:hover { background: #01579B; }
+  
+  .syllable-clap-area {
+    background: #FFF9C4;
+    border: 4px dashed #F57F17;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    min-height: 150px;
+    user-select: none;
+  }
+  .syllable-clap-area:active { background: #FFE082; }
+  .clap-emojis {
+    font-size: 3em;
+    min-height: 60px;
+  }
+  
+  @media (max-width: 700px) {
+    .big-word { font-size: 2.5em; }
+    h1 { font-size: 1.8em; }
+    .word-box, .test-word { font-size: 1.2em; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAVIGATION ============ -->
+<div class="nav-bar">
+  <button class="nav-btn active" onclick="showSlide(0, this)">🏠 Home</button>
+  <button class="nav-btn" onclick="showSlide(1, this)">1️⃣ Take Away</button>
+  <button class="nav-btn" onclick="showSlide(2, this)">2️⃣ Rhyming Words</button>
+  <button class="nav-btn" onclick="showSlide(3, this)">3️⃣ Rhyming Test</button>
+  <button class="nav-btn" onclick="showSlide(4, this)">4️⃣ Jumbled Jungle</button>
+  <button class="nav-btn" onclick="showSlide(5, this)">🎮 Class Games</button>
+</div>
+
+<div class="container">
+
+<!-- ============ SLIDE 0: HOME ============ -->
+<div class="slide active">
+  <header class="title-banner">
+    <h1>🎉 Fun with Reading & Writing! 🎉</h1>
+    <p style="font-size:1.2em; margin:10px 0 0 0;">Phonics & Spelling for Everyone</p>
+  </header>
+  
+  <div class="card">
+    <h2 class="section-title">📋 Today's Lessons</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:15px;">
+      <div onclick="showSlide(1, document.querySelectorAll('.nav-btn')[1])" style="cursor:pointer; background:#E1F5FE; padding:25px; border-radius:18px; text-align:center; border:4px solid #0277BD;">
+        <div style="font-size:3.5em;">✂️</div>
+        <h3 style="margin:5px 0; color:#01579B;">Take Away Game</h3>
+        <p style="margin:0;">Remove the first sound!</p>
+      </div>
+      <div onclick="showSlide(2, document.querySelectorAll('.nav-btn')[2])" style="cursor:pointer; background:#F3E5F5; padding:25px; border-radius:18px; text-align:center; border:4px solid #6A1B9A;">
+        <div style="font-size:3.5em;">🎵</div>
+        <h3 style="margin:5px 0; color:#4A148C;">Rhyming Words</h3>
+        <p style="margin:0;">Build words that rhyme!</p>
+      </div>
+      <div onclick="showSlide(3, document.querySelectorAll('.nav-btn')[3])" style="cursor:pointer; background:#E8F5E9; padding:25px; border-radius:18px; text-align:center; border:4px solid #2E7D32;">
+        <div style="font-size:3.5em;">🕵️</div>
+        <h3 style="margin:5px 0; color:#1B5E20;">Rhyming Test</h3>
+        <p style="margin:0;">Do they rhyme — yes or no?</p>
+      </div>
+      <div onclick="showSlide(4, document.querySelectorAll('.nav-btn')[4])" style="cursor:pointer; background:#FFF3E0; padding:25px; border-radius:18px; text-align:center; border:4px solid #BF360C;">
+        <div style="font-size:3.5em;">🦁</div>
+        <h3 style="margin:5px 0; color:#BF360C;">Jumbled Jungle</h3>
+        <p style="margin:0;">Clap the syllables!</p>
+      </div>
+    </div>
+    
+    <div onclick="showSlide(5, document.querySelectorAll('.nav-btn')[5])" style="cursor:pointer; margin-top:20px; background:linear-gradient(135deg, #FFD93D, #FF6B9D); padding:25px; border-radius:18px; text-align:center; border:5px solid #C62828;">
+      <div style="font-size:3.5em;">🎮</div>
+      <h3 style="margin:5px 0; color:white; font-size:1.6em;">CLASS GAMES!</h3>
+      <p style="margin:0; color:white; font-size:1.2em;">Play together as a class →</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 1: TAKE AWAY GAME ============ -->
+<div class="slide">
+  <div class="card">
+    <h2 class="section-title">✂️ The Take Away Game</h2>
+    
+    <div class="instructions">
+      <p style="margin-top:0;">
+        <b>What to do:</b> 🎯 Take away the <span style="color:#C62828;"><b>FIRST SOUND</b></span> 
+        of the word. What's left? 
+      </p>
+      <p style="margin-bottom:0;">
+        💡 Example: <b>clap</b> → take away "c" → <b style="color:#2E7D32;">lap</b>!
+      </p>
+      <p style="margin:10px 0 0 0; font-size:0.95em;">
+        🔊 Click any word or "?" box to hear the sound.
+      </p>
+    </div>
+    
+    <p style="text-align:center; font-size:1.2em; margin:20px 0;">
+      👇 Click each <b style="color:#FF6F00;">"?"</b> box to reveal the answer!
+    </p>
+    
+    <div id="takeawayList"></div>
+    
+    <div style="text-align:center; margin-top:20px;">
+      <button class="control-btn green" onclick="revealAllTakeaway()">👁️ Show All Answers</button>
+      <button class="control-btn orange" onclick="hideAllTakeaway()">🙈 Hide All Answers</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 2: RHYMING WORDS BUILDER ============ -->
+<div class="slide">
+  <div class="card">
+    <h2 class="section-title">🎵 Rhyming Words Builder</h2>
+    
+    <div class="instructions">
+      <p style="margin-top:0;">
+        <b>What to do:</b> 🎯 Pick an <b style="color:#4CAF50;">ENDING</b> first, 
+        then click a <b style="color:#6A1B9A;">LETTER</b> to put in front of it.
+      </p>
+      <p style="margin-bottom:0;">
+        💡 Example: <b>"-all"</b> + <b>"b"</b> = <b style="color:#C62828;">"ball"!</b> 🏀
+      </p>
+    </div>
+    
+    <div class="rhyme-builder">
+      <p style="text-align:center; font-size:1.2em; font-weight:bold; margin:0;">
+        Step 1: Pick an ending 👇
+      </p>
+      <div style="text-align:center; margin:15px 0;">
+        <button class="ending-label" onclick="selectEnding('all')">- all</button>
+        <button class="ending-label" onclick="selectEnding('at')">- at</button>
+        <button class="ending-label" onclick="selectEnding('ate')">- ate</button>
+      </div>
+      
+      <p style="text-align:center; font-size:1.2em; font-weight:bold; margin:20px 0 0 0;">
+        Step 2: Click a letter 👇
+      </p>
+      <div class="letter-bank" id="letterBank">
+        <div class="letter-tile" onclick="pickLetter('b', this)">b</div>
+        <div class="letter-tile" onclick="pickLetter('d', this)">d</div>
+        <div class="letter-tile" onclick="pickLetter('p', this)">p</div>
+        <div class="letter-tile" onclick="pickLetter('f', this)">f</div>
+        <div class="letter-tile" onclick="pickLetter('g', this)">g</div>
+        <div class="letter-tile" onclick="pickLetter('h', this)">h</div>
+        <div class="letter-tile" onclick="pickLetter('t', this)">t</div>
+        <div class="letter-tile" onclick="pickLetter('m', this)">m</div>
+        <div class="letter-tile" onclick="pickLetter('c', this)">c</div>
+        <div class="letter-tile" onclick="pickLetter('s', this)">s</div>
+      </div>
+      
+      <p style="text-align:center; font-size:1.2em; font-weight:bold; margin:20px 0 0 0;">
+        Your word: 📖
+      </p>
+      <div class="ending-display">
+        <div class="slot-box" id="letterSlot">?</div>
+        <div class="slot-box filled" id="endingSlot" style="font-size:1.6em;">- all</div>
+      </div>
+      
+      <div style="text-align:center;">
+        <div id="builtWord" style="font-size:2.5em; font-weight:bold; color:#C62828; margin:15px 0;"></div>
+        <button class="control-btn green" onclick="speakBuilt()">🔊 Say my word!</button>
+        <button class="control-btn orange" onclick="resetBuilder()">🔄 Reset</button>
+      </div>
+      
+      <div id="builtFeedback" style="text-align:center; font-size:1.2em; font-weight:bold; min-height:30px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 3: RHYMING TEST ============ -->
+<div class="slide">
+  <div class="card">
+    <h2 class="section-title">🕵️ Do They Rhyme?</h2>
+    
+    <div class="instructions">
+      <p style="margin-top:0;">
+        <b>What to do:</b> 👂 LISTEN to each pair of words. 
+        Do they sound the same at the END? 
+      </p>
+      <p style="margin-bottom:0;">
+        ✅ Click <b style="color:#43A047;">YES</b> if they rhyme, ❌ click <b style="color:#E53935;">NO</b> if they don't!
+      </p>
+      <p style="margin:10px 0 0 0;">
+        💡 Remember: This is about <b>SOUND</b>, not spelling!
+      </p>
+    </div>
+    
+    <div id="testList"></div>
+    
+    <div style="text-align:center; margin-top:20px; padding:20px; background:#FFF9C4; border-radius:15px;">
+      <h3 style="margin:0;">📊 Your Score: <span id="testScore" style="color:#C62828;">0</span> / 10</h3>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 4: JUMBLED JUNGLE ============ -->
+<div class="slide">
+  <div class="card">
+    <h2 class="section-title">🦁 Jumbled Jungle (Syllables)</h2>
+    
+    <div class="instructions">
+      <p style="margin-top:0;">
+        <b>What is a syllable?</b> 🥁 A syllable is a "beat" in a word.
+      </p>
+      <p>
+        💡 Example: <b>el • e • phant</b> 🐘 has <b>3 beats</b> = <b>3 syllables</b>!
+      </p>
+      <p style="margin-bottom:0;">
+        👏 Click each animal to hear it. Then count the claps!
+      </p>
+    </div>
+    
+    <div class="animal-grid" id="animalGrid"></div>
+    
+    <div style="text-align:center; margin-top:20px;">
+      <button class="control-btn green" onclick="showAllSyllables()">👁️ Show All Beats</button>
+      <button class="control-btn orange" onclick="hideAllSyllables()">🙈 Hide Beats</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 5: CLASS GAMES ============ -->
+<div class="slide">
+  <header class="title-banner">
+    <h1>🎮 Class Games Time! 🎮</h1>
+    <p style="font-size:1.1em; margin:10px 0 0 0;">Split into Team Apple 🍎 vs Team Banana 🍌</p>
+  </header>
+  
+  <!-- TEAM SCOREBOARD -->
+  <div class="card">
+    <h2 class="section-title">🏆 Scoreboard</h2>
+    <div class="scoreboard">
+      <div class="team-score">
+        <div class="team-name team-a">🍎 Team Apple</div>
+        <div class="team-points team-a" id="scoreA">0</div>
+        <button class="add-point-btn" onclick="addPoint('A')">+1 Point</button>
+        <button class="add-point-btn" onclick="minusPoint('A')" style="background:#FFCDD2;">-1</button>
+      </div>
+      <div class="team-score">
+        <div class="team-name team-b">🍌 Team Banana</div>
+        <div class="team-points team-b" id="scoreB">0</div>
+        <button class="add-point-btn" onclick="addPoint('B')">+1 Point</button>
+        <button class="add-point-btn" onclick="minusPoint('B')" style="background:#FFCDD2;">-1</button>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <button class="control-btn orange" onclick="resetScores()">🔄 Reset Scores</button>
+    </div>
+  </div>
+  
+  <!-- GAME 1: TAKE AWAY CHALLENGE -->
+  <div class="game-card">
+    <h2 class="game-title">🎯 GAME 1: Take Away Challenge!</h2>
+    <p style="text-align:center;">
+      I show a word. Teams take turns saying what's left when we remove the first sound. 
+      Fastest correct answer wins a point!
+    </p>
+    <div class="game-display">
+      <p>The word is...</p>
+      <div class="big-word" id="game1Word">CLICK START</div>
+      <button class="speak-icon" onclick="speakGame1()" id="game1Speak" style="display:none;">🔊</button>
+      <div class="feedback-big" id="game1Answer"></div>
+    </div>
+    <div style="text-align:center;">
+      <button class="control-btn green" onclick="nextGame1()">▶️ Next Word</button>
+      <button class="control-btn" onclick="revealGame1()">💡 Show Answer</button>
+    </div>
+  </div>
+  
+  <!-- GAME 2: BUILD-A-RHYME RACE -->
+  <div class="game-card" style="background:linear-gradient(135deg, #F8BBD0, #F48FB1); border-color:#C2185B;">
+    <h2 class="game-title" style="color:#880E4F;">🏁 GAME 2: Build-a-Rhyme Race!</h2>
+    <p style="text-align:center;">
+      I give an ending. Each team takes turns adding a different letter to make a real word. 
+      First team that runs out of ideas loses the round!
+    </p>
+    <div class="game-display">
+      <p>Today's ending is...</p>
+      <div class="big-word" id="game2Ending" style="color:#C2185B;">- ?</div>
+      <p id="game2Examples" style="color:#666; font-size:0.95em;"></p>
+    </div>
+    <div style="text-align:center;">
+      <button class="control-btn green" onclick="nextGame2()">🎲 New Ending</button>
+      <button class="control-btn" onclick="showGame2Examples()">💡 Show Words</button>
+    </div>
+  </div>
+  
+  <!-- GAME 3: RHYME OR NOT? -->
+  <div class="game-card" style="background:linear-gradient(135deg, #C8E6C9, #A5D6A7); border-color:#2E7D32;">
+    <h2 class="game-title" style="color:#1B5E20;">🕵️ GAME 3: Rhyme Detective!</h2>
+    <p style="text-align:center;">
+      I show two words. Teams whisper-discuss for 5 seconds, then both teams hold up 
+      ✅ YES or ❌ NO. Correct teams get a point!
+    </p>
+    <div class="game-display">
+      <p>Do these rhyme?</p>
+      <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">
+        <div class="big-word" id="game3W1" style="color:#1976D2;">?</div>
+        <div class="big-word" style="color:#666;">+</div>
+        <div class="big-word" id="game3W2" style="color:#C2185B;">?</div>
+      </div>
+      <button class="speak-icon" onclick="speakGame3()" id="game3Speak" style="display:none; margin:10px;">🔊 Hear both</button>
+      <div class="feedback-big" id="game3Answer"></div>
+    </div>
+    <div style="text-align:center;">
+      <button class="control-btn green" onclick="nextGame3()">▶️ Next Pair</button>
+      <button class="control-btn" onclick="revealGame3()">💡 Show Answer</button>
+    </div>
+  </div>
+  
+  <!-- GAME 4: SYLLABLE CLAP RACE -->
+  <div class="game-card" style="background:linear-gradient(135deg, #FFE0B2, #FFCC80); border-color:#E65100;">
+    <h2 class="game-title" style="color:#BF360C;">👏 GAME 4: Syllable Clap Race!</h2>
+    <p style="text-align:center;">
+      I show an animal. Teams clap the syllables together. 
+      Then a student taps the box ONE TIME for each syllable they hear!
+    </p>
+    <div class="game-display">
+      <p>The animal is...</p>
+      <div class="big-word" id="game4Word" style="color:#E65100;">?</div>
+      <div class="syllable-clap-area" onclick="clapSyllable()">
+        <p style="margin:0; font-size:1.2em;">👇 TAP HERE FOR EACH SYLLABLE 👇</p>
+        <div class="clap-emojis" id="clapEmojis"></div>
+        <p style="margin:5px 0 0 0; font-size:1.1em;">
+          You tapped: <b id="clapCount" style="color:#C62828; font-size:1.5em;">0</b> times
+        </p>
+      </div>
+      <div class="feedback-big" id="game4Answer"></div>
+    </div>
+    <div style="text-align:center;">
+      <button class="control-btn green" onclick="nextGame4()">▶️ Next Animal</button>
+      <button class="control-btn" onclick="checkClaps()">✅ Check My Claps</button>
+      <button class="control-btn orange" onclick="resetClaps()">🔄 Try Again</button>
+    </div>
+  </div>
+  
+  <!-- BONUS: MYSTERY PICKER -->
+  <div class="game-card" style="background:linear-gradient(135deg, #E1BEE7, #CE93D8); border-color:#6A1B9A;">
+    <h2 class="game-title" style="color:#4A148C;">🎲 BONUS: Mystery Student Picker!</h2>
+    <p style="text-align:center;">
+      Type student names (one per line), click the button, and let the spinner pick a student to answer!
+    </p>
+    <div style="text-align:center;">
+      <textarea id="studentNames" placeholder="Enter names, one per line:&#10;Amy&#10;Ben&#10;Chloe&#10;David" 
+        style="width:90%; max-width:400px; height:120px; font-size:1.1em; padding:10px; border-radius:10px; border:3px solid #6A1B9A; font-family:inherit;"></textarea>
+    </div>
+    <div class="game-display" style="background:#F3E5F5;">
+      <div class="big-word" id="pickedStudent" style="color:#6A1B9A;">🎲</div>
+    </div>
+    <div style="text-align:center;">
+      <button class="control-btn" onclick="pickStudent()" style="background:#6A1B9A;">🎯 Pick a Student!</button>
+    </div>
+  </div>
+  
+</div>
+
+</div>
+
+<script>
+/* ============ SPEECH ============ */
+function speak(text, rate=0.85) {
+  if (!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = rate;
+  u.lang = 'en-US';
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+/* ============ NAVIGATION ============ */
+function showSlide(idx, btn) {
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.slide')[idx].classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============ SLIDE 1: TAKE AWAY GAME ============ */
+const takeawayPairs = [
+  { full: 'cat',    rest: 'at',    first: 'c',  emoji: '🐱' },
+  { full: 'sit',    rest: 'it',    first: 's',  emoji: '🪑' },
+  { full: 'snow',   rest: 'no',    first: 's',  emoji: '❄️' },
+  { full: 'ground', rest: 'round', first: 'g',  emoji: '🌍' },
+  { full: 'plate',  rest: 'late',  first: 'p',  emoji: '🍽️' },
+  { full: 'flight', rest: 'light', first: 'f',  emoji: '✈️' },
+  { full: 'chair',  rest: 'air',   first: 'ch', emoji: '🪑' },
+  { full: 'door',   rest: 'or',    first: 'd',  emoji: '🚪' },
+  { full: 'bread',  rest: 'read',  first: 'b',  emoji: '🍞' },
+  { full: 'flow',   rest: 'low',   first: 'f',  emoji: '🌊' }
+];
+
+function buildTakeawayList() {
+  const list = document.getElementById('takeawayList');
+  list.innerHTML = takeawayPairs.map((p, i) => `
+    <div class="takeaway-row">
+      <span style="font-size:2.5em;">${p.emoji}</span>
+      <div class="word-box" onclick="speak('${p.full}')">
+        <span class="first">${p.first}</span><span class="rest">${p.full.slice(p.first.length)}</span>
+      </div>
+      <div class="arrow">➖ "${p.first}" =</div>
+      <div class="takeaway-result hidden" id="ta-${i}" onclick="toggleTakeaway(${i})">${p.rest}</div>
+    </div>
+  `).join('');
+}
+
+function toggleTakeaway(i) {
+  const el = document.getElementById('ta-' + i);
+  el.classList.toggle('hidden');
+  if (!el.classList.contains('hidden')) {
+    speak(takeawayPairs[i].rest);
+  }
+}
+
+function revealAllTakeaway() {
+  document.querySelectorAll('.takeaway-result').forEach(el => el.classList.remove('hidden'));
+}
+function hideAllTakeaway() {
+  document.querySelectorAll('.takeaway-result').forEach(el => el.classList.add('hidden'));
+}
+
+/* ============ SLIDE 2: RHYMING BUILDER ============ */
+let currentEnding = 'all';
+let currentLetter = '';
+
+const validWords = {
+  'all': ['ball', 'fall', 'tall', 'wall', 'call', 'hall', 'mall', 'small'],
+  'at':  ['bat', 'cat', 'fat', 'hat', 'mat', 'pat', 'rat', 'sat'],
+  'ate': ['date', 'fate', 'gate', 'hate', 'late', 'mate', 'rate', 'plate']
+};
+
+function selectEnding(ending) {
+  currentEnding = ending;
+  document.getElementById('endingSlot').textContent = '- ' + ending;
+  updateBuiltWord();
+}
+
+function pickLetter(letter, el) {
+  currentLetter = letter;
+  document.querySelectorAll('.letter-tile').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('letterSlot').textContent = letter;
+  document.getElementById('letterSlot').classList.add('filled');
+  updateBuiltWord();
+}
+
+function updateBuiltWord() {
+  const word = currentLetter + currentEnding;
+  const display = document.getElementById('builtWord');
+  const fb = document.getElementById('builtFeedback');
+  
+  if (!currentLetter) {
+    display.textContent = '';
+    fb.textContent = '';
+    return;
+  }
+  
+  display.textContent = word;
+  
+  if (validWords[currentEnding] && validWords[currentEnding].includes(word)) {
+    fb.innerHTML = '🎉 Yes! "' + word + '" is a real word!';
+    fb.style.color = '#2E7D32';
+    speak(word);
+  } else {
+    fb.innerHTML = '🤔 Hmm, "' + word + '" is not a common word. Try another letter!';
+    fb.style.color = '#E65100';
+  }
+}
+
+function speakBuilt() {
+  if (currentLetter) speak(currentLetter + currentEnding);
+}
+
+function resetBuilder() {
+  currentLetter = '';
+  document.getElementById('letterSlot').textContent = '?';
+  document.getElementById('letterSlot').classList.remove('filled');
+  document.getElementById('builtWord').textContent = '';
+  document.getElementById('builtFeedback').textContent = '';
+  document.querySelectorAll('.letter-tile').forEach(t => t.classList.remove('selected'));
+}
+
+/* ============ SLIDE 3: RHYMING TEST ============ */
+const testPairs = [
+  { w1: 'cap',    w2: 'tap',    rhymes: true,  hint: 'Both end in "-ap"!' },
+  { w1: 'big',    w2: 'dig',    rhymes: true,  hint: 'Both end in "-ig"!' },
+  { w1: 'pill',   w2: 'pit',    rhymes: false, hint: '"-ill" ≠ "-it". They start the same but end differently.' },
+  { w1: 'sat',    w2: 'mat',    rhymes: true,  hint: 'Both end in "-at"!' },
+  { w1: 'wall',   w2: 'war',    rhymes: false, hint: '"-all" ≠ "-ar".' },
+  { w1: 'now',    w2: 'how',    rhymes: true,  hint: 'Both end in "-ow" (same sound)!' },
+  { w1: 'bright', w2: 'night',  rhymes: true,  hint: 'Both end in "-ight" sound!' },
+  { w1: 'wood',   w2: 'should', rhymes: true,  hint: 'Tricky! Both end in "-ood" sound (oo + d).' },
+  { w1: 'cake',   w2: 'cape',   rhymes: false, hint: '"-ake" ≠ "-ape".' },
+  { w1: 'bird',   w2: 'heard',  rhymes: true,  hint: 'Tricky spelling, but both sound like "-erd"!' }
+];
+
+let testScore = 0;
+let testAnswered = new Array(testPairs.length).fill(false);
+
+function buildTestList() {
+  const list = document.getElementById('testList');
+  list.innerHTML = testPairs.map((p, i) => `
+    <div class="test-pair">
+      <div style="font-weight:bold; font-size:1.3em; min-width:30px;">${i+1}.</div>
+      <div class="test-words">
+        <div class="test-word" onclick="speak('${p.w1}')">${p.w1}</div>
+        <div class="test-word" onclick="speak('${p.w2}')">${p.w2}</div>
+      </div>
+      <div>
+        <button class="yn-btn yes-btn" id="yes-${i}" onclick="answerTest(${i}, true)">✅ YES</button>
+        <button class="yn-btn no-btn" id="no-${i}" onclick="answerTest(${i}, false)">❌ NO</button>
+      </div>
+      <div class="feedback-icon" id="fb-${i}"></div>
+    </div>
+    <div id="hint-${i}" style="margin:0 0 15px 50px; font-style:italic; color:#1565C0; min-height:5px;"></div>
+  `).join('');
+}
+
+function answerTest(i, userYes) {
+  if (testAnswered[i]) return;
+  testAnswered[i] = true;
+  
+  const correct = (userYes === testPairs[i].rhymes);
+  const fbIcon = document.getElementById('fb-' + i);
+  const hint = document.getElementById('hint-' + i);
+  const yesBtn = document.getElementById('yes-' + i);
+  const noBtn = document.getElementById('no-' + i);
+  
+  if (correct) {
+    fbIcon.textContent = '🎉';
+    testScore++;
+    speak('Correct!', 1.1);
+  } else {
+    fbIcon.textContent = '❌';
+  }
+  
+  // Highlight the correct answer
+  if (testPairs[i].rhymes) {
+    yesBtn.classList.add('correct');
+    if (!userYes) noBtn.classList.add('wrong');
+  } else {
+    noBtn.classList.add('correct');
+    if (userYes) yesBtn.classList.add('wrong');
+  }
+  
+  hint.textContent = '💡 ' + testPairs[i].hint;
+  document.getElementById('testScore').textContent = testScore;
+}
+
+/* ============ SLIDE 4: JUMBLED JUNGLE ============ */
+const animals = [
+  { word: 'lion',      syl: ['li','on'],            count: 2, emoji: '🦁' },
+  { word: 'snake',     syl: ['snake'],              count: 1, emoji: '🐍' },
+  { word: 'zebra',     syl: ['ze','bra'],           count: 2, emoji: '🦓' },
+  { word: 'eagle',     syl: ['ea','gle'],           count: 2, emoji: '🦅' },
+  { word: 'giraffe',   syl: ['gi','raffe'],         count: 2, emoji: '🦒' },
+  { word: 'gorilla',   syl: ['go','ril','la'],      count: 3, emoji: '🦍' },
+  { word: 'elephant',  syl: ['el','e','phant'],     count: 3, emoji: '🐘' },
+  { word: 'butterfly', syl: ['but','ter','fly'],    count: 3, emoji: '🦋' },
+  { word: 'crocodile', syl: ['croc','o','dile'],    count: 3, emoji: '🐊' },
+  { word: 'antelope',  syl: ['an','te','lope'],     count: 3, emoji: '🦌' }
+];
+
+function buildAnimals() {
+  const grid = document.getElementById('animalGrid');
+  grid.innerHTML = animals.map((a, i) => `
+    <div class="animal-card" onclick="speak('${a.word}')">
+      <div class="animal-emoji">${a.emoji}</div>
+      <div class="animal-word">${a.word}</div>
+      <div class="animal-syllables hidden-syl" id="syl-${i}" style="display:none;">
+        ${a.syl.map(s => `<span class="syllable-chunk">${s}</span>`).join('')}
+      </div>
+      <div class="clap-counter hidden-syl" id="clap-${i}" style="display:none;">
+        ${'👏'.repeat(a.count)} = <b>${a.count}</b> beat${a.count>1?'s':''}
+      </div>
+      <button class="add-point-btn" onclick="event.stopPropagation(); toggleSyllable(${i})">
+        🔍 Show beats
+      </button>
+    </div>
+  `).join('');
+}
+
+function toggleSyllable(i) {
+  const syl = document.getElementById('syl-' + i);
+  const clap = document.getElementById('clap-' + i);
+  const isHidden = syl.style.display === 'none';
+  syl.style.display = isHidden ? 'flex' : 'none';
+  clap.style.display = isHidden ? 'block' : 'none';
+}
+
+function showAllSyllables() {
+  animals.forEach((_, i) => {
+    document.getElementById('syl-' + i).style.display = 'flex';
+    document.getElementById('clap-' + i).style.display = 'block';
+  });
+}
+function hideAllSyllables() {
+  animals.forEach((_, i) => {
+    document.getElementById('syl-' + i).style.display = 'none';
+    document.getElementById('clap-' + i).style.display = 'none';
+  });
+}
+
+/* ============ GAMES: SCORES ============ */
+let scoreA = 0, scoreB = 0;
+function addPoint(team) {
+  if (team === 'A') { scoreA++; document.getElementById('scoreA').textContent = scoreA; }
+  else { scoreB++; document.getElementById('scoreB').textContent = scoreB; }
+  speak('Yes!', 1.2);
+}
+function minusPoint(team) {
+  if (team === 'A' && scoreA > 0) { scoreA--; document.getElementById('scoreA').textContent = scoreA; }
+  else if (team === 'B' && scoreB > 0) { scoreB--; document.getElementById('scoreB').textContent = scoreB; }
+}
+function resetScores() {
+  scoreA = 0; scoreB = 0;
+  document.getElementById('scoreA').textContent = 0;
+  document.getElementById('scoreB').textContent = 0;
+}
+
+/* ============ GAME 1: TAKE AWAY CHALLENGE ============ */
+let game1Idx = -1;
+let game1Pool = [...takeawayPairs,
+  { full: 'spot',  rest: 'pot',  first: 's' },
+  { full: 'star',  rest: 'tar',  first: 's' },
+  { full: 'block', rest: 'lock', first: 'b' },
+  { full: 'glove', rest: 'love', first: 'g' },
+  { full: 'spice', rest: 'pice', first: 's' },
+  { full: 'train', rest: 'rain', first: 't' },
+  { full: 'smile', rest: 'mile', first: 's' },
+  { full: 'plant', rest: 'lant', first: 'p' }
+];
+
+function nextGame1() {
+  let newIdx;
+  do { newIdx = Math.floor(Math.random() * game1Pool.length); }
+  while (newIdx === game1Idx && game1Pool.length > 1);
+  game1Idx = newIdx;
+  const w = game1Pool[game1Idx];
+  document.getElementById('game1Word').textContent = w.full.toUpperCase();
+  document.getElementById('game1Answer').textContent = '';
+  document.getElementById('game1Speak').style.display = 'inline-block';
+  speak(w.full);
+}
+function speakGame1() { if (game1Idx >= 0) speak(game1Pool[game1Idx].full); }
+function revealGame1() {
+  if (game1Idx < 0) return;
+  const w = game1Pool[game1Idx];
+  document.getElementById('game1Answer').innerHTML = 
+    '🎯 Take away "' + w.first + '" → <span style="color:#2E7D32;">' + w.rest.toUpperCase() + '</span>';
+  speak(w.rest);
+}
+
+/* ============ GAME 2: BUILD-A-RHYME RACE ============ */
+const rhymeFamilies = [
+  { ending: 'at',  examples: 'cat, hat, bat, rat, mat, sat, fat, pat' },
+  { ending: 'all', examples: 'ball, fall, tall, wall, call, hall, mall' },
+  { ending: 'ake', examples: 'cake, bake, lake, snake, make, take, wake' },
+  { ending: 'op',  examples: 'top, hop, mop, pop, stop, drop, shop' },
+  { ending: 'in',  examples: 'pin, bin, fin, tin, win, chin, spin' },
+  { ending: 'ed',  examples: 'bed, red, fed, led, shed, bread, head' },
+  { ending: 'an',  examples: 'pan, can, fan, man, ran, van, plan' },
+  { ending: 'ig',  examples: 'pig, big, dig, fig, wig, jig, twig' },
+  { ending: 'ot',  examples: 'pot, hot, dot, got, lot, knot, shot' },
+  { ending: 'un',  examples: 'sun, run, fun, bun, gun, nun, spun' }
+];
+let game2Idx = -1;
+
+function nextGame2() {
+  let newIdx;
+  do { newIdx = Math.floor(Math.random() * rhymeFamilies.length); }
+  while (newIdx === game2Idx);
+  game2Idx = newIdx;
+  document.getElementById('game2Ending').textContent = '- ' + rhymeFamilies[game2Idx].ending;
+  document.getElementById('game2Examples').textContent = '';
+  speak('words ending in ' + rhymeFamilies[game2Idx].ending);
+}
+function showGame2Examples() {
+  if (game2Idx < 0) return;
+  document.getElementById('game2Examples').textContent = '💡 Examples: ' + rhymeFamilies[game2Idx].examples;
+}
+
+/* ============ GAME 3: RHYME DETECTIVE ============ */
+const game3Pairs = [
+  ...testPairs,
+  { w1: 'fish',  w2: 'dish',  rhymes: true,  hint: 'Both end in "-ish"!' },
+  { w1: 'star',  w2: 'car',   rhymes: true,  hint: 'Both end in "-ar"!' },
+  { w1: 'frog',  w2: 'fish',  rhymes: false, hint: 'Same start, different end.' },
+  { w1: 'moon',  w2: 'spoon', rhymes: true,  hint: 'Both end in "-oon"!' },
+  { w1: 'sun',   w2: 'fun',   rhymes: true,  hint: 'Both end in "-un"!' },
+  { w1: 'tree',  w2: 'three', rhymes: true,  hint: 'Both end in "-ee"!' },
+  { w1: 'rain',  w2: 'snow',  rhymes: false, hint: '"-ain" ≠ "-ow".' },
+  { w1: 'red',   w2: 'bed',   rhymes: true,  hint: 'Both end in "-ed"!' }
+];
+let game3Idx = -1;
+
+function nextGame3() {
+  let newIdx;
+  do { newIdx = Math.floor(Math.random() * game3Pairs.length); }
+  while (newIdx === game3Idx);
+  game3Idx = newIdx;
+  document.getElementById('game3W1').textContent = game3Pairs[game3Idx].w1;
+  document.getElementById('game3W2').textContent = game3Pairs[game3Idx].w2;
+  document.getElementById('game3Answer').textContent = '';
+  document.getElementById('game3Speak').style.display = 'inline-block';
+  speakGame3();
+}
+function speakGame3() {
+  if (game3Idx < 0) return;
+  speak(game3Pairs[game3Idx].w1);
+  setTimeout(() => speak(game3Pairs[game3Idx].w2), 1000);
+}
+function revealGame3() {
+  if (game3Idx < 0) return;
+  const p = game3Pairs[game3Idx];
+  const ans = p.rhymes ? '✅ YES — they rhyme!' : '❌ NO — they do not rhyme.';
+  const color = p.rhymes ? '#2E7D32' : '#C62828';
+  document.getElementById('game3Answer').innerHTML = 
+    '<span style="color:' + color + ';">' + ans + '</span><br><span style="font-size:0.7em; color:#1565C0;">💡 ' + p.hint + '</span>';
+}
+
+/* ============ GAME 4: SYLLABLE CLAP RACE ============ */
+let game4Idx = -1;
+let clapCount = 0;
+
+function nextGame4() {
+  let newIdx;
+  do { newIdx = Math.floor(Math.random() * animals.length); }
+  while (newIdx === game4Idx);
+  game4Idx = newIdx;
+  document.getElementById('game4Word').textContent = 
+    animals[game4Idx].emoji + ' ' + animals[game4Idx].word;
+  document.getElementById('game4Answer').textContent = '';
+  resetClaps();
+  speak(animals[game4Idx].word);
+}
+
+function clapSyllable() {
+  if (game4Idx < 0) return;
+  clapCount++;
+  document.getElementById('clapCount').textContent = clapCount;
+  const emojis = document.getElementById('clapEmojis');
+  emojis.innerHTML += '👏 ';
+  // Play a short sound
+  speak('clap', 1.5);
+}
+
+function checkClaps() {
+  if (game4Idx < 0) {
+    document.getElementById('game4Answer').textContent = 'Click "Next Animal" first!';
+    return;
+  }
+  const correct = animals[game4Idx].count;
+  const ans = document.getElementById('game4Answer');
+  if (clapCount === correct) {
+    ans.innerHTML = '🎉 PERFECT! "' + animals[game4Idx].word + '" has ' + correct + ' syllables: ' +
+      animals[game4Idx].syl.map(s => '<b>'+s+'</b>').join(' • ');
+    ans.style.color = '#2E7D32';
+    speak('Excellent!', 1.1);
+  } else {
+    ans.innerHTML = '🤔 You tapped ' + clapCount + '. The correct answer is ' + correct + ': ' +
+      animals[game4Idx].syl.map(s => '<b>'+s+'</b>').join(' • ');
+    ans.style.color = '#E65100';
+  }
+}
+
+function resetClaps() {
+  clapCount = 0;
+  document.getElementById('clapCount').textContent = 0;
+  document.getElementById('clapEmojis').innerHTML = '';
+  document.getElementById('game4Answer').textContent = '';
+}
+
+/* ============ BONUS: STUDENT PICKER ============ */
+function pickStudent() {
+  const text = document.getElementById('studentNames').value;
+  const names = text.split('\n').map(n => n.trim()).filter(n => n.length > 0);
+  
+  if (names.length === 0) {
+    document.getElementById('pickedStudent').textContent = '⚠️ Add names first!';
+    return;
+  }
+  
+  const display = document.getElementById('pickedStudent');
+  let count = 0;
+  const maxSpins = 15;
+  
+  const interval = setInterval(() => {
+    display.textContent = names[Math.floor(Math.random() * names.length)];
+    count++;
+    if (count >= maxSpins) {
+      clearInterval(interval);
+      const final = names[Math.floor(Math.random() * names.length)];
+      display.innerHTML = '🎯 ' + final + ' 🎯';
+      speak(final + ', your turn!', 0.9);
+    }
+  }, 100);
+}
+
+/* ============ INIT ============ */
+buildTakeawayList();
+buildTestList();
+buildAnimals();
+</script>
+
+</body>
+</html>
