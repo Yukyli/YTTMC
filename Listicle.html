@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>How to Look Good? — Teaching Slides</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: #1a202c;
+    color: #fff;
+    overflow: hidden;
+    height: 100vh;
+  }
+  .slideshow {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slide {
+    display: none;
+    width: 90%;
+    max-width: 1100px;
+    height: 88vh;
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    border-radius: 16px;
+    padding: 40px 50px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    overflow-y: auto;
+    animation: fadeIn 0.4s ease;
+  }
+  .slide.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  h1 {
+    font-size: 2.6em;
+    background: linear-gradient(90deg, #4299e1, #9f7aea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  h2 {
+    font-size: 2em;
+    color: #63b3ed;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #4a5568;
+    padding-bottom: 10px;
+  }
+  h3 {
+    font-size: 1.3em;
+    color: #faf089;
+    margin: 15px 0 8px 0;
+  }
+  p, li { font-size: 1.15em; line-height: 1.6; margin-bottom: 10px; }
+  ul, ol { padding-left: 28px; }
+  .center { text-align: center; }
+  .subtitle { font-size: 1.4em; color: #a0aec0; text-align: center; margin-bottom: 30px; }
+  .big-emoji { font-size: 5em; text-align: center; margin: 20px 0; }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 25px 0;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin: 20px 0;
+  }
+  .card {
+    background: #4a5568;
+    padding: 18px 12px;
+    border-radius: 10px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+  }
+  .card:hover {
+    border-color: #63b3ed;
+    transform: translateY(-3px);
+    background: #2d3748;
+  }
+  .card .icon { font-size: 2.5em; margin-bottom: 8px; }
+  .card .label { font-weight: bold; color: #faf089; font-size: 1em; }
+  .card .desc { font-size: 0.85em; color: #cbd5e0; margin-top: 4px; }
+  .frame {
+    background: #1a365d;
+    border-left: 5px solid #4299e1;
+    padding: 16px 22px;
+    margin: 14px 0;
+    border-radius: 6px;
+    font-size: 1.15em;
+  }
+  .frame code {
+    background: #2d3748;
+    padding: 3px 8px;
+    border-radius: 4px;
+    color: #faf089;
+    font-family: 'Courier New', monospace;
+  }
+  .good {
+    background: #22543d;
+    border-left: 5px solid #48bb78;
+    padding: 12px 20px;
+    margin: 8px 0;
+    border-radius: 6px;
+    font-size: 1.1em;
+  }
+  .bad {
+    background: #742a2a;
+    border-left: 5px solid #f56565;
+    padding: 12px 20px;
+    margin: 8px 0;
+    border-radius: 6px;
+    font-size: 1.1em;
+  }
+  .reveal {
+    background: #4a5568;
+    border: 2px dashed #f6ad55;
+    padding: 14px 20px;
+    margin: 12px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.1em;
+  }
+  .reveal:hover { background: #2d3748; }
+  .reveal .answer {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #f6ad55;
+    color: #faf089;
+  }
+  .reveal.shown .answer { display: block; }
+  .reveal .hint { font-size: 0.85em; color: #a0aec0; font-style: italic; }
+  .vote-box {
+    background: #2d3748;
+    border: 2px solid #f6ad55;
+    padding: 18px 22px;
+    margin: 14px 0;
+    border-radius: 8px;
+    font-size: 1.15em;
+  }
+  .vote-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    justify-content: center;
+  }
+  .vote-buttons button {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .vote-buttons button:hover { transform: scale(1.05); }
+  .btn-sick { background: #f56565; color: white; }
+  .btn-healthy { background: #48bb78; color: white; }
+  .vote-result {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 6px;
+    display: none;
+    font-weight: bold;
+    text-align: center;
+  }
+  .vote-result.show { display: block; }
+  .controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(0,0,0,0.6);
+    padding: 10px 20px;
+    border-radius: 30px;
+    z-index: 100;
+  }
+  .controls button {
+    background: #4299e1;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background 0.2s;
+  }
+  .controls button:hover { background: #3182ce; }
+  .controls button:disabled { background: #4a5568; cursor: not-allowed; }
+  .counter { color: #fff; font-weight: bold; min-width: 70px; text-align: center; }
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4299e1, #9f7aea);
+    transition: width 0.3s ease;
+    z-index: 99;
+  }
+  .day-badge {
+    display: inline-block;
+    background: #e53e3e;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.7em;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .day-badge.day2 { background: #38a169; }
+  .key-hint {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    color: #718096;
+    font-size: 0.85em;
+    background: rgba(0,0,0,0.4);
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
+  .recap-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+  }
+  .recap-item {
+    background: #2d3748;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border-left: 4px solid #9f7aea;
+  }
+  .recap-item .num {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #9f7aea;
+  }
+  @media (max-width: 700px) {
+    .slide { padding: 25px 20px; }
+    h1 { font-size: 1.8em; }
+    h2 { font-size: 1.4em; }
+    p, li { font-size: 1em; }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-2 { grid-template-columns: 1fr; }
+    .recap-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="key-hint">← → keys to navigate</div>
+
+<div class="slideshow">
+
+  <!-- Slide 1: Title -->
+  <div class="slide active">
+    <div class="big-emoji">✨ 💁 ✨</div>
+    <h1>How to Look Good?</h1>
+    <p class="subtitle">Designing a Health & Appearance Survey</p>
+    <p class="center" style="margin-top:30px; color:#a0aec0;">Form 2 · English Project · 90 minutes (Day 1 + Day 2)</p>
+    <div style="margin-top:40px; text-align:center; color:#cbd5e0;">
+      <p>📰 You will help the <b>school newspaper</b> by:</p>
+      <p style="margin-top:15px;">1️⃣ Choosing common appearance problems</p>
+      <p>2️⃣ Designing a survey about <b>habits</b></p>
+      <p>3️⃣ Writing a <b>listicle</b> with helpful tips</p>
+    </div>
+  </div>
+
+  <!-- Slide 2: The 8 Problems -->
+  <div class="slide">
+    <h2>The 8 Common Problems <span class="day-badge">Day 1</span></h2>
+    <p>From textbook <b>p.39</b> — these are the appearance problems we will work with:</p>
+    <div class="grid-4">
+      <div class="card"><div class="icon">💋</div><div class="label">Chapped lips</div><div class="desc">Dry, cracked lips</div></div>
+      <div class="card"><div class="icon">😵</div><div class="label">Dark circles</div><div class="desc">Around the eyes</div></div>
+      <div class="card"><div class="icon">👁️</div><div class="label">Puffy eyes</div><div class="desc">Swollen eyelids</div></div>
+      <div class="card"><div class="icon">😬</div><div class="label">Uneven teeth</div><div class="desc">Not straight</div></div>
+      <div class="card"><div class="icon">❄️</div><div class="label">Dandruff</div><div class="desc">White flakes in hair</div></div>
+      <div class="card"><div class="icon">💆</div><div class="label">Oily hair</div><div class="desc">Greasy scalp</div></div>
+      <div class="card"><div class="icon">🔴</div><div class="label">Spots</div><div class="desc">Pimples / acne</div></div>
+      <div class="card"><div class="icon">🦱</div><div class="label">Unwanted body hair</div><div class="desc">e.g. on arms</div></div>
+    </div>
+    <p class="center" style="color:#faf089;">👉 Your group will choose <b>4 problems</b> to focus on.</p>
+  </div>
+
+  <!-- Slide 3: Problem to Habit -->
+  <div class="slide">
+    <h2>Problem ➡️ Habit ➡️ Cause</h2>
+    <p>Every appearance problem is connected to a <b>daily habit</b>. Our survey will ask classmates about their habits!</p>
+    <div class="grid-2" style="margin-top:25px;">
+      <div class="card" style="background:#742a2a;">
+        <div class="icon">🔴</div>
+        <div class="label">Problem: Spots</div>
+        <div class="desc" style="color:#fed7d7; margin-top:8px;">⬇️</div>
+        <div class="label" style="color:#faf089;">Habit: Eating oily food</div>
+        <div class="desc" style="color:#fed7d7; margin-top:8px;">⬇️</div>
+        <div class="label" style="color:#faf089;">Why: Blocks skin pores</div>
+      </div>
+      <div class="card" style="background:#22543d;">
+        <div class="icon">💆</div>
+        <div class="label">Problem: Oily hair</div>
+        <div class="desc" style="color:#c6f6d5; margin-top:8px;">⬇️</div>
+        <div class="label" style="color:#faf089;">Habit: Not washing hair often</div>
+        <div class="desc" style="color:#c6f6d5; margin-top:8px;">⬇️</div>
+        <div class="label" style="color:#faf089;">Why: Oil builds up on the scalp</div>
+      </div>
+    </div>
+    <p class="center" style="margin-top:20px; color:#9f7aea; font-size:1.2em;"><b>💡 Your survey questions will ask about these HABITS.</b></p>
+  </div>
+
+  <!-- Slide 4: Three Question Types -->
+  <div class="slide">
+    <h2>3 Types of Questions</h2>
+    <p>Your questionnaire must use a <b>mix</b> of three question types:</p>
+    <div class="grid-2" style="margin-top:30px;">
+      <div class="card" style="padding:30px 20px;">
+        <div class="icon">✅❌</div>
+        <div class="label" style="font-size:1.3em;">① Yes / No</div>
+        <div class="desc" style="margin-top:10px;">Quick answers</div>
+      </div>
+      <div class="card" style="padding:30px 20px;">
+        <div class="icon">📅</div>
+        <div class="label" style="font-size:1.3em;">② Frequency</div>
+        <div class="desc" style="margin-top:10px;">How often?</div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr; margin-top:18px;">
+      <div class="card" style="padding:25px 20px;">
+        <div class="icon">❓</div>
+        <div class="label" style="font-size:1.3em;">③ Wh- Questions (open answers)</div>
+        <div class="desc" style="margin-top:8px;">What / When / Where / Who / Why / How</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Yes/No structure -->
+  <div class="slide">
+    <h2>① Yes / No Questions</h2>
+    <div class="frame">
+      <b>Structure:</b> <code>Do</code> / <code>Does</code> + <i>subject</i> + <i>verb</i> + ... ?
+    </div>
+    <div class="frame">
+      <b>Structure:</b> <code>Have</code> / <code>Has</code> + <i>subject</i> + <i>past participle</i> + ... ?
+    </div>
+    <h3 style="margin-top:25px;">✅ Examples:</h3>
+    <div class="good"><i>Do you</i> have spots on your face?</div>
+    <div class="good"><i>Does your sister</i> use a hair conditioner?</div>
+    <div class="good"><i>Have you</i> ever had dandruff?</div>
+
+    <h3 style="margin-top:25px;">⚠️ Common Mistake:</h3>
+    <div class="bad">❌ <i>You like apples?</i> (missing "Do")</div>
+    <div class="good">✅ <b>Do</b> you like apples?</div>
+  </div>
+
+  <!-- Slide 6: Frequency -->
+  <div class="slide">
+    <h2>② Frequency Questions</h2>
+    <div class="frame">
+      <b>Structure:</b> <code>How often</code> + <code>do</code> / <code>does</code> + <i>subject</i> + <i>verb</i> + ... ?
+    </div>
+    <h3>Possible Answers:</h3>
+    <div class="grid-4" style="margin:15px 0;">
+      <div class="card" style="background:#22543d;"><div class="label">always</div></div>
+      <div class="card" style="background:#22543d;"><div class="label">usually</div></div>
+      <div class="card" style="background:#22543d;"><div class="label">often</div></div>
+      <div class="card" style="background:#4a5568;"><div class="label">sometimes</div></div>
+      <div class="card" style="background:#742a2a;"><div class="label">rarely</div></div>
+      <div class="card" style="background:#742a2a;"><div class="label">never</div></div>
+      <div class="card" style="background:#1a365d;"><div class="label">twice a day</div></div>
+      <div class="card" style="background:#1a365d;"><div class="label">once a week</div></div>
+    </div>
+    <h3>✅ Examples:</h3>
+    <div class="good"><i>How often do you</i> wash your hair?</div>
+    <div class="good"><i>How often does your brother</i> drink water?</div>
+  </div>
+
+  <!-- Slide 7: Wh- questions -->
+  <div class="slide">
+    <h2>③ Wh- Questions</h2>
+    <p>Six question words you should remember:</p>
+    <div class="grid-4" style="margin:25px 0;">
+      <div class="card" style="background:#1a365d;"><div class="label" style="font-size:1.2em;">What</div></div>
+      <div class="card" style="background:#1a365d;"><div class="label" style="font-size:1.2em;">When</div></div>
+      <div class="card" style="background:#1a365d;"><div class="label" style="font-size:1.2em;">Where</div></div>
+      <div class="card" style="background:#1a365d;"><div class="label" style="font-size:1.2em;">Who</div></div>
+      <div class="card" style="background:#1a365d;"><div class="label" style="font-size:1.2em;">Why</div></div>
+      <div class="card" style="background:#1a365d;"><div class="label" style="font-size:1.2em;">How</div></div>
+    </div>
+    <div class="frame">
+      <b>Structure:</b> <code>Wh-word</code> + <code>do</code> / <code>does</code> + <i>subject</i> + <i>verb</i> + ... ?
+    </div>
+    <div class="frame">
+      <b>With "be" verb:</b> <code>Wh-word</code> + <code>is</code> / <code>are</code> + <i>subject</i> + ... ?
+    </div>
+    <h3>✅ Examples:</h3>
+    <div class="good"><i>What do you</i> usually drink in the morning?</div>
+    <div class="good"><i>When is</i> the best time to brush your teeth?</div>
+  </div>
+
+  <!-- Slide 8: Fix the mistake -->
+  <div class="slide">
+    <h2>🛠️ Fix the Broken Questions</h2>
+    <p>Click each question to see the correction:</p>
+
+    <div class="reveal" onclick="this.classList.toggle('shown')">
+      ❌ <b>You wash your face every day?</b>
+      <div class="hint">(Click to reveal)</div>
+      <div class="answer">✅ <b>Do</b> you wash your face every day? <span style="color:#a0aec0;">(Add "Do" at the start)</span></div>
+    </div>
+
+    <div class="reveal" onclick="this.classList.toggle('shown')">
+      ❌ <b>How often you eat fast food?</b>
+      <div class="hint">(Click to reveal)</div>
+      <div class="answer">✅ How often <b>do</b> you eat fast food? <span style="color:#a0aec0;">(Add "do" after "how often")</span></div>
+    </div>
+
+    <div class="reveal" onclick="this.classList.toggle('shown')">
+      ❌ <b>What you drink in the morning?</b>
+      <div class="hint">(Click to reveal)</div>
+      <div class="answer">✅ What <b>do</b> you drink in the morning? <span style="color:#a0aec0;">(Add "do" after the Wh-word)</span></div>
+    </div>
+
+    <div class="reveal" onclick="this.classList.toggle('shown')">
+      ❌ <b>Does your friend has dandruff?</b>
+      <div class="hint">(Click to reveal)</div>
+      <div class="answer">✅ Does your friend <b>have</b> dandruff? <span style="color:#a0aec0;">(After "does", use the base verb "have")</span></div>
+    </div>
+
+    <div class="reveal" onclick="this.classList.toggle('shown')">
+      ❌ <b>Why your skin is oily?</b>
+      <div class="hint">(Click to reveal)</div>
+      <div class="answer">✅ Why <b>is</b> your skin oily? <span style="color:#a0aec0;">("Is" comes before the subject in questions)</span></div>
+    </div>
+  </div>
+
+  <!-- Slide 9: SICK introduction -->
+  <div class="slide">
+    <h2>🤢 What is a SICK Question?</h2>
+    <p class="center subtitle">A SICK question is a <b>BAD</b> question that we should avoid!</p>
+    <div class="grid-2" style="margin-top:25px;">
+      <div class="card" style="background:#742a2a; padding:25px;">
+        <div class="icon">😡</div>
+        <div class="label" style="font-size:1.2em;">RUDE</div>
+        <div class="desc" style="margin-top:10px; color:#fed7d7;">Makes the person feel embarrassed or attacked.</div>
+      </div>
+      <div class="card" style="background:#742a2a; padding:25px;">
+        <div class="icon">🙄</div>
+        <div class="label" style="font-size:1.2em;">OBVIOUS</div>
+        <div class="desc" style="margin-top:10px; color:#fed7d7;">The answer is so obvious — it gives no useful information.</div>
+      </div>
+      <div class="card" style="background:#742a2a; padding:25px;">
+        <div class="icon">🎯</div>
+        <div class="label" style="font-size:1.2em;">LEADING</div>
+        <div class="desc" style="margin-top:10px; color:#fed7d7;">Pushes the person to give a certain answer.</div>
+      </div>
+      <div class="card" style="background:#742a2a; padding:25px;">
+        <div class="icon">🔒</div>
+        <div class="label" style="font-size:1.2em;">TOO PERSONAL / TWO-IN-ONE</div>
+        <div class="desc" style="margin-top:10px; color:#fed7d7;">Asks something private, OR asks two things at once.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10: SICK or Healthy vote 1 -->
+  <div class="slide">
+    <h2>🗳️ SICK or HEALTHY?</h2>
+    <p>Vote with your classmates! Is this a good question or a SICK one?</p>
+
+    <div class="vote-box">
+      <p><b>Question 1:</b> <i>"Don't you think people with dandruff are dirty?"</i></p>
+      <div class="vote-buttons">
+        <button class="btn-sick" onclick="showVote(this, 'sick1', true, 'LEADING & RUDE: It pushes you to agree, and it insults people.')">🤢 SICK</button>
+        <button class="btn-healthy" onclick="showVote(this, 'sick1', false, '')">😊 HEALTHY</button>
+      </div>
+      <div class="vote-result" id="sick1"></div>
+    </div>
+
+    <div class="vote-box">
+      <p><b>Question 2:</b> <i>"How often do you brush your teeth?"</i></p>
+      <div class="vote-buttons">
+        <button class="btn-sick" onclick="showVote(this, 'sick2', false, '')">🤢 SICK</button>
+        <button class="btn-healthy" onclick="showVote(this, 'sick2', true, 'Clear, polite, and useful — a perfect frequency question!')">😊 HEALTHY</button>
+      </div>
+      <div class="vote-result" id="sick2"></div>
+    </div>
+
+    <div class="vote-box">
+      <p><b>Question 3:</b> <i>"Do you breathe air?"</i></p>
+      <div class="vote-buttons">
+        <button class="btn-sick" onclick="showVote(this, 'sick3', true, 'OBVIOUS: Of course everyone breathes air! The answer gives no information.')">🤢 SICK</button>
+        <button class="btn-healthy" onclick="showVote(this, 'sick3', false, '')">😊 HEALTHY</button>
+      </div>
+      <div class="vote-result" id="sick3"></div>
+    </div>
+  </div>
+
+  <!-- Slide 11: SICK or Healthy vote 2 -->
+  <div class="slide">
+    <h2>🗳️ SICK or HEALTHY? (Round 2)</h2>
+
+    <div class="vote-box">
+      <p><b>Question 4:</b> <i>"How much money does your family earn and what is your home address?"</i></p>
+      <div class="vote-buttons">
+        <button class="btn-sick" onclick="showVote(this, 'sick4', true, 'TOO PERSONAL & TWO-IN-ONE: Both parts are private, AND it asks two questions at once.')">🤢 SICK</button>
+        <button class="btn-healthy" onclick="showVote(this, 'sick4', false, '')">😊 HEALTHY</button>
+      </div>
+      <div class="vote-result" id="sick4"></div>
+    </div>
+
+    <div class="vote-box">
+      <p><b>Question 5:</b> <i>"What do you usually eat for breakfast?"</i></p>
+      <div class="vote-buttons">
+        <button class="btn-sick" onclick="showVote(this, 'sick5', false, '')">🤢 SICK</button>
+        <button class="btn-healthy" onclick="showVote(this, 'sick5', true, 'A great open Wh-question — useful for learning about habits!')">😊 HEALTHY</button>
+      </div>
+      <div class="vote-result" id="sick5"></div>
+    </div>
+
+    <div class="vote-box">
+      <p><b>Question 6:</b> <i>"Why is your face so spotty?"</i></p>
+      <div class="vote-buttons">
+        <button class="btn-sick" onclick="showVote(this, 'sick6', true, 'RUDE: It makes the person feel embarrassed about their appearance. Better: \"Do you sometimes get spots?\"')">🤢 SICK</button>
+        <button class="btn-healthy" onclick="showVote(this, 'sick6', false, '')">😊 HEALTHY</button>
+      </div>
+      <div class="vote-result" id="sick6"></div>
+    </div>
+  </div>
+
+  <!-- Slide 12: Listicle -->
+  <div class="slide">
+    <h2>📝 What is a Listicle? <span class="day-badge day2">Day 2</span></h2>
+    <p>A <b>listicle</b> = an article written as a <b>list</b>. Very popular in newspapers and on the internet!</p>
+    <div class="grid-2" style="margin-top:25px;">
+      <div class="card" style="background:#1a365d; text-align:left; padding:20px;">
+        <div class="label" style="font-size:1.1em; margin-bottom:10px;">📰 Real Examples:</div>
+        <p style="font-size:0.95em;">• "5 Ways to Get Better Sleep"</p>
+        <p style="font-size:0.95em;">• "7 Habits of Successful Students"</p>
+        <p style="font-size:0.95em;">• "10 Foods That Make Your Skin Glow"</p>
+      </div>
+      <div class="card" style="background:#22543d; text-align:left; padding:20px;">
+        <div class="label" style="font-size:1.1em; margin-bottom:10px;">✨ Your Task:</div>
+        <p style="font-size:0.95em;">Write <b>5 tips</b> for the school newspaper based on your survey results.</p>
+        <p style="font-size:0.95em; margin-top:10px;">Each tip = <b>1 advice sentence + 1 short reason</b>.</p>
+      </div>
+    </div>
+    <h3 style="margin-top:20px;">📌 Sample Tip:</h3>
+    <div class="good">
+      <b>Tip:</b> Wash your hair at least 3 times a week.<br>
+      <b>Why:</b> Our survey shows 4 out of 10 classmates have oily hair because they wash their hair only once a week.
+    </div>
+  </div>
+
+  <!-- Slide 13: Recap -->
+  <div class="slide">
+    <h2>🎯 Quick Recap — Before You Start!</h2>
+    <div class="recap-grid">
+      <div class="recap-item">
+        <div class="num">1</div>
+        <p>Choose <b>4 problems</b> from the list of 8.</p>
+      </div>
+      <div class="recap-item">
+        <div class="num">2</div>
+        <p>Link each problem to a <b>habit</b>.</p>
+      </div>
+      <div class="recap-item">
+        <div class="num">3</div>
+        <p>Use <b>3 question types</b>: Yes/No, Frequency, Wh-.</p>
+      </div>
+      <div class="recap-item">
+        <div class="num">4</div>
+        <p>Avoid <b>SICK</b> questions: rude, obvious, leading, too personal.</p>
+      </div>
+      <div class="recap-item">
+        <div class="num">5</div>
+        <p>Survey <b>3 classmates</b> and record answers.</p>
+      </div>
+      <div class="recap-item">
+        <div class="num">6</div>
+        <p>Write a <b>5-tip listicle</b> for the school newspaper.</p>
+      </div>
+    </div>
+    <p class="center" style="margin-top:30px; font-size:1.4em; color:#faf089;">
+      🚀 Now open your worksheet — let's begin! 🚀
+    </p>
+  </div>
+
+</div>
+
+<div class="controls">
+  <button id="prevBtn" onclick="changeSlide(-1)">← Prev</button>
+  <span class="counter" id="counter">1 / 13</span>
+  <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const progressBar = document.getElementById('progressBar');
+
+  function showSlide(n) {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    counter.textContent = `${n + 1} / ${totalSlides}`;
+    prevBtn.disabled = n === 0;
+    nextBtn.disabled = n === totalSlides - 1;
+    progressBar.style.width = `${((n + 1) / totalSlides) * 100}%`;
+    slides[n].scrollTop = 0;
+  }
+
+  function changeSlide(dir) {
+    const next = currentSlide + dir;
+    if (next >= 0 && next < totalSlides) {
+      currentSlide = next;
+      showSlide(currentSlide);
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);
+    if (e.key === 'ArrowLeft') changeSlide(-1);
+  });
+
+  function showVote(btn, id, correct, explanation) {
+    const result = document.getElementById(id);
+    result.classList.add('show');
+    if (correct) {
+      result.style.background = '#22543d';
+      result.style.color = '#c6f6d5';
+      result.innerHTML = '✅ <b>Correct!</b> ' + explanation;
+    } else {
+      result.style.background = '#742a2a';
+      result.style.color = '#fed7d7';
+      result.innerHTML = '❌ <b>Try again!</b> Look more carefully...';
+    }
+  }
+
+  showSlide(0);
+</script>
+
+</body>
+</html>
